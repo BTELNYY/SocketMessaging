@@ -10,11 +10,16 @@ using System.Windows.Forms;
 
 namespace SocketMessagingClient
 {
-    public partial class Form1 : Form
+    public partial class Chat : Form
     {
-        public Form1()
+        public Chat()
         {
             InitializeComponent();
+        }
+
+        private void textBox1_TextChanged(object sender, EventArgs e)
+        {
+            this.BackColor = Color.White;
         }
     }
 }
