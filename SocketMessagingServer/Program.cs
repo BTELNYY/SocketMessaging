@@ -1,15 +1,20 @@
-﻿using System;
+﻿using SocketMessagingShared;
+using SocketNetworking;
+using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace SocketMessagingServer
 {
-    internal class Program
+    public class Program
     {
-        static void Main(string[] args)
+        public static void Main(string[] args)
         {
+            NetworkServer.ClientType = typeof(MessagingClient);
+            NetworkServer.DefaultReady = false;
         }
     }
 }
