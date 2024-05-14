@@ -19,7 +19,7 @@ namespace SocketMessagingClient
 
         private void Login_Load(object sender, EventArgs e)
         {
-            this.BackColor = Color.Black;
+            
         }
 
         private void textBox1_TextChanged(object sender, EventArgs e)
