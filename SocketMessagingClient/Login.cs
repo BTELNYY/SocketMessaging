@@ -19,18 +19,11 @@ namespace SocketMessagingClient
 
         private void Login_Load(object sender, EventArgs e)
         {
-            
+            BackColor = Color.FromArgb(39, 40, 41);
         }
 
         private void textBox1_TextChanged(object sender, EventArgs e)
         {
-            this.BackColor = Color.White;
-            this.MaximumSize = Size.Empty;
-        }
-
-        private void textBox2_TextChanged(object sender, EventArgs e)
-        {
-            this.BackColor = Color.White;
         }
     }
 }
