@@ -68,11 +68,23 @@ namespace SocketMessagingShared
             _ownerId = owner;
         }
 
-        public MessagingClient Client { get; private set; }
+        public OwnershipMode OwnershipMode
+        {
+            get
+            {
+                return OwnershipMode.Client;
+            }
+            set
+            {
+                throw new InvalidOperationException("Only clients may own this object.");
+            }
+        }
 
         public int NetworkID => _id;
 
         public bool IsEnabled => true;
+
+        public MessagingClient Client { get; private set; }
 
         public string _username = string.Empty;
 
@@ -92,8 +104,6 @@ namespace SocketMessagingShared
                 ClientSetUsername(value);
             }
         }
-
-        public bool IsServerOwned => false;
 
         [NetworkInvocable(PacketDirection.Server)]
         private void SetUsernameRPC(string username)
