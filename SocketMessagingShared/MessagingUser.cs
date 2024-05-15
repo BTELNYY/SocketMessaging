@@ -19,6 +19,7 @@ namespace SocketMessagingShared
         {
             Client = client;
             _id = NetworkManager.GetNextNetworkID();
+            _ownerId = Client.ClientID;
         }
 
         public MessagingUser(int id)
@@ -26,7 +27,46 @@ namespace SocketMessagingShared
             _id = id;
         }
 
+        public MessagingUser(int id, int ownerId)
+        {
+            _id = id;
+            _ownerId = ownerId;
+        }
+
         private int _id = 0;
+
+        public int OwnerID
+        {
+            get
+            {
+                return _ownerId;
+            }
+        }
+
+        private int _ownerId = 0;
+
+        public int OwnerClientID
+        {
+            get
+            {
+                return _ownerId;
+            }
+            set
+            {
+                if(NetworkManager.WhereAmI != ClientLocation.Remote)
+                {
+                    return;
+                }
+                _ownerId = value;
+                NetworkServer.NetworkInvokeOnAll(this, nameof(SetOwnerIdRPC), new object[] { value });
+            }
+        }
+
+        [NetworkInvocable(PacketDirection.Server)]
+        private void SetOwnerIdRPC(int owner)
+        {
+            _ownerId = owner;
+        }
 
         public MessagingClient Client { get; private set; }
 
@@ -52,6 +92,8 @@ namespace SocketMessagingShared
                 ClientSetUsername(value);
             }
         }
+
+        public bool IsServerOwned => false;
 
         [NetworkInvocable(PacketDirection.Server)]
         private void SetUsernameRPC(string username)

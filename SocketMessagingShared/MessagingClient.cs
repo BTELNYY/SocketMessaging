@@ -58,9 +58,9 @@ namespace SocketMessagingShared
         }
 
         [NetworkInvocable(PacketDirection.Server)]
-        private void ClientAddedRpc(int id)
+        private void ClientAddedRpc(int id, int ownerId)
         {
-            MessagingUser user = new MessagingUser(id);
+            MessagingUser user = new MessagingUser(id, ownerId);
             NetworkManager.AddNetworkObject(user);
             Log.GlobalDebug($"Client added rpc {id}");
             ClientLogin("Username", "Password");
@@ -68,7 +68,7 @@ namespace SocketMessagingShared
 
         public void ServerNotifyClientAdded(MessagingUser user)
         {
-            NetworkInvoke(nameof(ClientAddedRpc), new object[] { user.NetworkID });
+            NetworkInvoke(nameof(ClientAddedRpc), new object[] { user.NetworkID, user.OwnerClientID });
         }
     }
 }
