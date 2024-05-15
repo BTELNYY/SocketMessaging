@@ -9,9 +9,11 @@ using System.Threading.Tasks;
 
 namespace SocketMessagingShared
 {
-    public class MessagingUser : INetworkObject
+    public class MessagingUser : MessageObject
     {
         public static List<MessagingUser> Users = new List<MessagingUser>();
+
+
 
         public MessagingUser() { }
 
@@ -35,17 +37,9 @@ namespace SocketMessagingShared
 
         private int _id = 0;
 
-        public int OwnerID
-        {
-            get
-            {
-                return _ownerId;
-            }
-        }
-
         private int _ownerId = 0;
 
-        public int OwnerClientID
+        public override int OwnerClientID
         {
             get
             {
@@ -68,7 +62,7 @@ namespace SocketMessagingShared
             _ownerId = owner;
         }
 
-        public OwnershipMode OwnershipMode
+        public override OwnershipMode OwnershipMode
         {
             get
             {
@@ -80,9 +74,9 @@ namespace SocketMessagingShared
             }
         }
 
-        public int NetworkID => _id;
+        public override int NetworkID => _id;
 
-        public bool IsEnabled => true;
+        public override bool IsEnabled => true;
 
         public MessagingClient Client { get; private set; }
 
@@ -128,7 +122,7 @@ namespace SocketMessagingShared
             return NetworkManager.NetworkInvoke<bool>(this, Client, nameof(SetUsernameCommand), new object[] { username });
         }
 
-        public void OnAdded(INetworkObject addedObject)
+        public override void OnAdded(INetworkObject addedObject)
         {
             if(addedObject == this)
             {
@@ -136,17 +130,7 @@ namespace SocketMessagingShared
             }
         }
 
-        public void OnDisconnected(NetworkClient client)
-        {
-            
-        }
-
-        public void OnReady(NetworkClient client, bool isReady)
-        {
-            
-        }
-
-        public void OnRemoved(INetworkObject removedObject)
+        public override void OnRemoved(INetworkObject removedObject)
         {
             if(removedObject == this)
             {

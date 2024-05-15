@@ -14,9 +14,17 @@ namespace SocketMessagingServer
         public static void Main(string[] args)
         {
             Log.OnLog += HandleNetworkLog;
+            Log.SetHiddenFlag(LogSeverity.Debug);
             NetworkServer.ClientType = typeof(MessagingClient);
             NetworkServer.DefaultReady = false;
             NetworkServer.StartServer();
+            NetworkServer.ClientConnected += ClientConnected;
+        }
+
+        private static void ClientConnected(int obj)
+        {
+            MessagingClient client = (MessagingClient)NetworkServer.GetClient(obj);
+            client.EventHandler = new CustomServerSideClientEventHandler();
         }
 
         private static void HandleNetworkLog(LogData data)

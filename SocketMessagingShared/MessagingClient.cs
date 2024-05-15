@@ -2,6 +2,7 @@
 using SocketNetworking.Attributes;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -15,6 +16,8 @@ namespace SocketMessagingShared
             base.Init();
             this.ConnectionStateUpdated += CreateUserObject;
         }
+
+        public ClientEventHandler EventHandler { get; set; } = new ClientEventHandler();
 
         private void CreateUserObject(ConnectionState obj)
         {
@@ -41,12 +44,22 @@ namespace SocketMessagingShared
         }
 
         [NetworkInvocable(PacketDirection.Client)]
-        private void PerformLoginCommand(LoginData data)
+        private void ServerPerformLoginCommand(LoginData data)
         {
-            Log.GlobalDebug(data.ToString());
+            if (!EventHandler.ValidateLogin(data, out string reason))
+            {
+                NetworkInvoke(this, nameof(ClientLoginFail), new string[] { reason });
+                return;
+            }
             User.ServerSetUsername(data.Username);
             Ready = true;
             return;
+        }
+
+        [NetworkInvocable(PacketDirection.Server)]
+        private void ClientLoginFail(string reason)
+        {
+            Log.GlobalError("Login failed: " + reason);
         }
 
         public void ClientLogin(string username, string password) 
@@ -54,11 +67,11 @@ namespace SocketMessagingShared
             LoginData loginData = new LoginData();
             loginData.Username = username;
             loginData.SetPassword(password);
-            NetworkInvoke(this, nameof(PerformLoginCommand), new object[] { loginData });
+            NetworkInvoke(this, nameof(ServerPerformLoginCommand), new object[] { loginData });
         }
 
         [NetworkInvocable(PacketDirection.Server)]
-        private void ClientAddedRpc(int id, int ownerId)
+        void ClientAddedRpc(int id, int ownerId)
         {
             MessagingUser user = new MessagingUser(id, ownerId);
             NetworkManager.AddNetworkObject(user);

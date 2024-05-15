@@ -16,10 +16,12 @@ namespace SocketMessagingTestClient
         public static void Main(string[] args)
         {
             Log.OnLog += HandleNetworkLog;
+            Log.SetHiddenFlag(LogSeverity.Debug);
             MyClient = new MessagingClient();
             MyClient.InitLocalClient();
             MyClient.Connect("127.0.0.1", 7777, "");
             NetworkClient.ClientConnectionStateChanged += ClientFullyConnected;
+            MyClient.EventHandler = new CustomClientEventHandler();
         }
 
         private static void ClientFullyConnected(NetworkClient obj)
