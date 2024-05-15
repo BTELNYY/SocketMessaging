@@ -7,16 +7,31 @@ using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SocketMessagingServer
+namespace SocketMessagingTestClient
 {
     public class Program
     {
+        static MessagingClient MyClient;
+
         public static void Main(string[] args)
         {
             Log.OnLog += HandleNetworkLog;
-            NetworkServer.ClientType = typeof(MessagingClient);
-            NetworkServer.DefaultReady = false;
-            NetworkServer.StartServer();
+            MyClient = new MessagingClient();
+            MyClient.InitLocalClient();
+            MyClient.Connect("127.0.0.1", 7777, "");
+            NetworkClient.ClientConnectionStateChanged += ClientFullyConnected;
+        }
+
+        private static void ClientFullyConnected(NetworkClient obj)
+        {
+            if(obj.CurrentConnectionState != ConnectionState.Connected)
+            {
+                return;
+            }
+            if(obj != MyClient)
+            {
+                return;
+            }
         }
 
         private static void HandleNetworkLog(LogData data)

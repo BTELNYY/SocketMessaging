@@ -19,6 +19,11 @@ namespace SocketMessagingShared
             PasswordHash = password.GetStringHash();
         }
 
+        public override string ToString()
+        {
+            return $"Username: {Username}, Hash: {PasswordHash}";
+        }
+
         public int Deserialize(byte[] data)
         {
             ByteReader reader = new ByteReader(data);

@@ -4,16 +4,17 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{81174F6B-3C24-4029-A5E0-9CC802B281EE}</ProjectGuid>
-    <OutputType>Library</OutputType>
-    <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>SocketMessagingShared</RootNamespace>
-    <AssemblyName>SocketMessagingShared</AssemblyName>
+    <ProjectGuid>{4EF64C9A-4595-43DD-94F1-9C3E38C420DE}</ProjectGuid>
+    <OutputType>Exe</OutputType>
+    <RootNamespace>SocketMessagingTestClient</RootNamespace>
+    <AssemblyName>SocketMessagingTestClient</AssemblyName>
     <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
+    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
     <Deterministic>true</Deterministic>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
@@ -23,6 +24,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
     <OutputPath>bin\Release\</OutputPath>
@@ -41,15 +43,20 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="LoginData.cs" />
-    <Compile Include="MessagingClient.cs" />
-    <Compile Include="MessagingUser.cs" />
+    <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\SocketNetworking\SocketNetworking\SocketNetworking.csproj">
       <Project>{ab97887e-ef11-4ce3-83b6-7e91456cf035}</Project>
       <Name>SocketNetworking</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\SocketMessagingShared\SocketMessagingShared.csproj">
+      <Project>{81174f6b-3c24-4029-a5e0-9cc802b281ee}</Project>
+      <Name>SocketMessagingShared</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

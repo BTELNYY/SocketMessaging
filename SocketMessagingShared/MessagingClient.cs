@@ -10,60 +10,65 @@ namespace SocketMessagingShared
 {
     public class MessagingClient : NetworkClient
     {
-        public string _username = string.Empty;
-
-        public string Username
+        public override void Init()
         {
-            get
+            base.Init();
+            this.ConnectionStateUpdated += CreateUserObject;
+        }
+
+        private void CreateUserObject(ConnectionState obj)
+        {
+            if(obj != ConnectionState.Connected)
             {
-                return _username;
+                return;
             }
-            set
+            _user = new MessagingUser(this);
+            NetworkManager.AddNetworkObject(_user);
+            if(CurrnetClientLocation == ClientLocation.Remote)
             {
-                if(NetworkManager.WhereAmI == ClientLocation.Remote)
-                {
-                    ServerSetUsername(value);
-                    return;
-                }
+                ServerNotifyClientAdded(_user);
             }
         }
 
-        [NetworkInvocable(PacketDirection.Server)]
-        private void SetUsernameRPC(string username)
-        {
-            _username = username;
-        }
+        private MessagingUser _user;
 
-        public void ServerSetUsername(string username)
+        public MessagingUser User 
         {
-            NetworkServer.NetworkInvokeOnAll(this, nameof(SetUsernameRPC), new object[] { username });
+            get    
+            {
+                return _user;
+            } 
         }
 
         [NetworkInvocable(PacketDirection.Client)]
-        private bool SetUsernameCommand(string username)
+        private void PerformLoginCommand(LoginData data)
         {
-            Username = username;
-            return true;
+            //Log.GlobalDebug(data.ToString());
+            User.ServerSetUsername(data.Username);
+            Ready = true;
+            return;
         }
 
-        public bool ClientSetUsername(string username)
-        {
-            return NetworkInvoke<bool>(nameof(SetUsernameCommand), new object[] { username });
-        }
-
-        [NetworkInvocable(PacketDirection.Client)]
-        private bool PerformLoginCommand(LoginData data)
-        {
-            ServerSetUsername(data.Username);
-            return true;
-        }
-
-        public bool ClientLogin(string username, string password) 
+        public void ClientLogin(string username, string password) 
         {
             LoginData loginData = new LoginData();
             loginData.Username = username;
             loginData.SetPassword(password);
-            return NetworkInvoke<bool>(nameof(PerformLoginCommand), new object[] { loginData });
+            NetworkInvoke(nameof(PerformLoginCommand), new object[] { loginData });
+        }
+
+        [NetworkInvocable(PacketDirection.Server)]
+        private void ClientAddedRpc(int id)
+        {
+            MessagingUser user = new MessagingUser(id);
+            NetworkManager.AddNetworkObject(user);
+            //Log.GlobalDebug($"Client added rpc {id}");
+            ClientLogin("Username", "Password");
+        }
+
+        public void ServerNotifyClientAdded(MessagingUser user)
+        {
+            NetworkInvoke(nameof(ClientAddedRpc), new object[] { user.NetworkID });
         }
     }
 }

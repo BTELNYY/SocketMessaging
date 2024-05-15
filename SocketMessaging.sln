@@ -11,6 +11,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SocketMessagingServer", "So
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SocketMessagingShared", "SocketMessagingShared\SocketMessagingShared.csproj", "{81174F6B-3C24-4029-A5E0-9CC802B281EE}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SocketMessagingTestClient", "SocketMessagingTestClient\SocketMessagingTestClient.csproj", "{4EF64C9A-4595-43DD-94F1-9C3E38C420DE}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -33,6 +35,10 @@ Global
 		{81174F6B-3C24-4029-A5E0-9CC802B281EE}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{81174F6B-3C24-4029-A5E0-9CC802B281EE}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{81174F6B-3C24-4029-A5E0-9CC802B281EE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4EF64C9A-4595-43DD-94F1-9C3E38C420DE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4EF64C9A-4595-43DD-94F1-9C3E38C420DE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4EF64C9A-4595-43DD-94F1-9C3E38C420DE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4EF64C9A-4595-43DD-94F1-9C3E38C420DE}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
