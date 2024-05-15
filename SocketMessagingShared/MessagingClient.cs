@@ -43,7 +43,7 @@ namespace SocketMessagingShared
         [NetworkInvocable(PacketDirection.Client)]
         private void PerformLoginCommand(LoginData data)
         {
-            //Log.GlobalDebug(data.ToString());
+            Log.GlobalDebug(data.ToString());
             User.ServerSetUsername(data.Username);
             Ready = true;
             return;
@@ -54,7 +54,7 @@ namespace SocketMessagingShared
             LoginData loginData = new LoginData();
             loginData.Username = username;
             loginData.SetPassword(password);
-            NetworkInvoke(nameof(PerformLoginCommand), new object[] { loginData });
+            NetworkInvoke(this, nameof(PerformLoginCommand), new object[] { loginData });
         }
 
         [NetworkInvocable(PacketDirection.Server)]
@@ -62,7 +62,7 @@ namespace SocketMessagingShared
         {
             MessagingUser user = new MessagingUser(id);
             NetworkManager.AddNetworkObject(user);
-            //Log.GlobalDebug($"Client added rpc {id}");
+            Log.GlobalDebug($"Client added rpc {id}");
             ClientLogin("Username", "Password");
         }
 
