@@ -23,6 +23,11 @@ namespace SocketMessagingShared
 
         }
 
+        public virtual void OnConnected(NetworkClient client)
+        {
+            
+        }
+
         public virtual void OnDisconnected(NetworkClient client)
         {
 

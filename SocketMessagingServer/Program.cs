@@ -1,4 +1,5 @@
-﻿using SocketMessagingShared;
+﻿using SocketMessagingServer.ServerData;
+using SocketMessagingShared;
 using SocketNetworking;
 using System;
 using System.Collections.Generic;
@@ -15,6 +16,7 @@ namespace SocketMessagingServer
         {
             Log.OnLog += HandleNetworkLog;
             Log.SetHiddenFlag(LogSeverity.Debug);
+            UserdataManager.SyncUsersToList();
             NetworkServer.ClientType = typeof(MessagingClient);
             NetworkServer.DefaultReady = false;
             NetworkServer.StartServer();

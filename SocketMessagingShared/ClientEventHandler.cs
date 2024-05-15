@@ -13,5 +13,11 @@ namespace SocketMessagingShared
             reason = string.Empty;
             return true;
         }
+
+        public virtual bool ServerCreateAccount(string username, string password, out string reason)
+        {
+            reason = string.Empty;
+            return true;
+        }
     }
 }

@@ -24,6 +24,20 @@ namespace SocketMessagingServer.ServerData
             }
         }
 
+        static Dictionary<string, string> UsernameToGuid = new Dictionary<string, string>();
+
+        public static void SyncUsersToList()
+        {
+            foreach(string dir in Directory.GetDirectories(UserDataDirectory))
+            {
+                UserProfile profile = GetProfile(dir.Split('/').Last());
+                if (profile != null)
+                {
+                    UsernameToGuid.Add(profile.Username, profile.PermanentID);
+                }
+            }
+        }
+
         public static void WriteProfileData(UserProfile profile)
         {
             string dir = UserDataDirectory + profile.PermanentID;
@@ -44,6 +58,18 @@ namespace SocketMessagingServer.ServerData
             }
         }
 
+        public static UserProfile GetProfileByUsername(string username)
+        {
+            if (UsernameToGuid.ContainsKey(username))
+            {
+                return GetProfile(UsernameToGuid[username]);
+            }
+            else
+            {
+                return null;
+            }
+        }
+
         public static UserProfile GetProfile(string userid)
         {
             string dir = UserDataDirectory + userid;
@@ -61,13 +87,20 @@ namespace SocketMessagingServer.ServerData
             return profile;
         }
 
-        public static void CreateProfile(string username, string password)
+        public static bool CreateProfile(string username, string password, out string result)
         {
             UserProfile profile = new UserProfile();
             profile.Username = username;
             profile.PasswordHash = password;
             profile.PermanentID = Guid.NewGuid().ToString();
+            if (UsernameToGuid.ContainsKey(username))
+            {
+                result = "Username is already taken.";
+                return false;
+            }
             WriteProfileData(profile);
+            result = string.Empty;
+            return true;
         }
     }
 }

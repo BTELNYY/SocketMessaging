@@ -13,8 +13,6 @@ namespace SocketMessagingShared
     {
         public static List<MessagingUser> Users = new List<MessagingUser>();
 
-
-
         public MessagingUser() { }
 
         public MessagingUser(MessagingClient client)
@@ -120,6 +118,15 @@ namespace SocketMessagingShared
         public bool ClientSetUsername(string username)
         {
             return NetworkManager.NetworkInvoke<bool>(this, Client, nameof(SetUsernameCommand), new object[] { username });
+        }
+
+        public override void OnDisconnected(NetworkClient client)
+        {
+            base.OnDisconnected(client);
+            if(client.ClientID == OwnerClientID)
+            {
+                
+            }
         }
 
         public override void OnAdded(INetworkObject addedObject)

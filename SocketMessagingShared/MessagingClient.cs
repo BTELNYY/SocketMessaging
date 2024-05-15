@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
+using System.Security.Policy;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -43,17 +44,45 @@ namespace SocketMessagingShared
             } 
         }
 
+        public bool ClientLogin(string username, string password) 
+        {
+            LoginData loginData = new LoginData();
+            loginData.Username = username;
+            loginData.SetPassword(password);
+            return NetworkInvoke<bool>(this, nameof(ServerPerformLoginCommand), new object[] { loginData });
+        }
+
+        public bool ClientCreateAccount(string username, string password)
+        {
+            LoginData loginData = new LoginData();
+            loginData.Username = username;
+            loginData.SetPassword(password);
+            return NetworkInvoke<bool>(nameof(ServerCreateAccountCommand), new object[] { loginData });
+        }
+
+        public void ServerNotifyClientAdded(MessagingUser user)
+        {
+            NetworkInvoke(nameof(ClientAddedRpc), new object[] { user.NetworkID, user.OwnerClientID });
+        }
+
+        public void ServerNotifyClientRemoved(MessagingUser user)
+        {
+            NetworkInvoke(nameof(ClientRemovedRpc), new object[] { user.NetworkID });
+        }
+
         [NetworkInvocable(PacketDirection.Client)]
-        private void ServerPerformLoginCommand(LoginData data)
+        private bool ServerPerformLoginCommand(LoginData data)
         {
             if (!EventHandler.ValidateLogin(data, out string reason))
             {
+                Log.GlobalInfo($"Rejecting client login from {ClientID} becuase: {reason}");
                 NetworkInvoke(this, nameof(ClientLoginFail), new string[] { reason });
-                return;
+                return false;
             }
+            Log.GlobalInfo($"User '{data.Username}' logged in with ClientID {ClientID}");
             User.ServerSetUsername(data.Username);
             Ready = true;
-            return;
+            return true;
         }
 
         [NetworkInvocable(PacketDirection.Server)]
@@ -62,12 +91,21 @@ namespace SocketMessagingShared
             Log.GlobalError("Login failed: " + reason);
         }
 
-        public void ClientLogin(string username, string password) 
+        [NetworkInvocable(PacketDirection.Client)]
+        private bool ServerCreateAccountCommand(LoginData data)
         {
-            LoginData loginData = new LoginData();
-            loginData.Username = username;
-            loginData.SetPassword(password);
-            NetworkInvoke(this, nameof(ServerPerformLoginCommand), new object[] { loginData });
+            if(!EventHandler.ServerCreateAccount(data.Username, data.PasswordHash, out string reason))
+            {
+                NetworkInvoke(nameof(ClientFailAccountCreation), new object[] { reason });
+                return false;
+            }
+            return true;
+        }
+
+        [NetworkInvocable(PacketDirection.Server)]
+        private void ClientFailAccountCreation(string reason)
+        {
+            Log.GlobalError("Failed to create account. Reason: " + reason);
         }
 
         [NetworkInvocable(PacketDirection.Server)]
@@ -75,13 +113,20 @@ namespace SocketMessagingShared
         {
             MessagingUser user = new MessagingUser(id, ownerId);
             NetworkManager.AddNetworkObject(user);
-            Log.GlobalDebug($"Client added rpc {id}");
-            ClientLogin("Username", "Password");
         }
 
-        public void ServerNotifyClientAdded(MessagingUser user)
+        [NetworkInvocable(PacketDirection.Server)]
+        void ClientRemovedRpc(int id)
         {
-            NetworkInvoke(nameof(ClientAddedRpc), new object[] { user.NetworkID, user.OwnerClientID });
+            MessagingUser user = MessagingUser.Users.Where(x => x.NetworkID == id).FirstOrDefault();
+            if(user == null)
+            {
+                return;
+            }
+            else
+            {
+                NetworkManager.RemoveNetworkObject(user);
+            }
         }
     }
 }
