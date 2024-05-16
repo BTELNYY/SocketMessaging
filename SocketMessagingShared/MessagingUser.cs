@@ -123,9 +123,16 @@ namespace SocketMessagingShared
         public override void OnDisconnected(NetworkClient client)
         {
             base.OnDisconnected(client);
-            if(client.ClientID == OwnerClientID)
+            if(client.ClientID == OwnerClientID && NetworkManager.WhereAmI == ClientLocation.Remote)
             {
-                
+                foreach(NetworkClient c in NetworkServer.ConnectedClients)
+                {
+                    MessagingClient msgClient = c as MessagingClient;
+                    if(msgClient != null)
+                    {
+                        msgClient.ServerNotifyClientRemoved(this);
+                    }
+                }
             }
         }
 

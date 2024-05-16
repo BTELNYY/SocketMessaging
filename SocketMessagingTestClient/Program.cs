@@ -2,9 +2,11 @@
 using SocketNetworking;
 using System;
 using System.Collections.Generic;
+using System.Data.SqlTypes;
 using System.Linq;
 using System.Security.Cryptography.X509Certificates;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace SocketMessagingTestClient
@@ -22,6 +24,53 @@ namespace SocketMessagingTestClient
             MyClient.Connect("127.0.0.1", 7777, "");
             NetworkClient.ClientConnectionStateChanged += ClientFullyConnected;
             MyClient.EventHandler = new CustomClientEventHandler();
+            Thread console = new Thread(HandleConsole);
+            console.Start();
+        }
+
+        static void HandleConsole()
+        {
+            while (true)
+            {
+                string input = Console.ReadLine();
+                string[] command = input.Split(' ');
+                if(command.Length == 0)
+                {
+                    continue;
+                }
+                switch(command[0])
+                {
+                    case "login":
+                        if(command.Length < 3)
+                        {
+                            WriteLineColor("Incorrect syntax. use: login <username> <password>", ConsoleColor.Red);
+                        }
+                        string username = command[1];
+                        string password = command[2];
+                        bool success = MyClient.ClientLogin(username, password);
+                        if (success)
+                        {
+                            WriteLineColor("Login completed without errors, you are now logged in as: " + username, ConsoleColor.White);
+                        }
+                        break;
+                    case "createaccount":
+                        if (command.Length < 3)
+                        {
+                            WriteLineColor("Incorrect syntax. use: createaccount <username> <password>", ConsoleColor.Red);
+                        }
+                        string newUsername = command[1];
+                        string newPassword = command[2];
+                        bool creationSuccess = MyClient.ClientCreateAccount(newUsername, newPassword);
+                        if (creationSuccess)
+                        {
+                            Console.WriteLine("Account created! Username: " + newUsername);
+                        }
+                        break;
+                    default:
+                        WriteLineColor("Unkown Command: " + command[0], ConsoleColor.Red);
+                        break;
+                }
+            }
         }
 
         private static void ClientFullyConnected(NetworkClient obj)

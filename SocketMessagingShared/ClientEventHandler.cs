@@ -19,5 +19,15 @@ namespace SocketMessagingShared
             reason = string.Empty;
             return true;
         }
+
+        public virtual void ClientFailCreatingNewAccount(string reason)
+        {
+
+        }
+
+        public virtual void ClientFailLogin(string reason)
+        {
+
+        }
     }
 }

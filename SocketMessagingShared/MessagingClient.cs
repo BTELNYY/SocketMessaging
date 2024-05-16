@@ -89,6 +89,7 @@ namespace SocketMessagingShared
         private void ClientLoginFail(string reason)
         {
             Log.GlobalError("Login failed: " + reason);
+            EventHandler.ClientFailLogin(reason);
         }
 
         [NetworkInvocable(PacketDirection.Client)]
@@ -106,6 +107,7 @@ namespace SocketMessagingShared
         private void ClientFailAccountCreation(string reason)
         {
             Log.GlobalError("Failed to create account. Reason: " + reason);
+            EventHandler.ClientFailCreatingNewAccount(reason);
         }
 
         [NetworkInvocable(PacketDirection.Server)]
