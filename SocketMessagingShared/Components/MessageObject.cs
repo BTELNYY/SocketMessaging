@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SocketMessagingShared
+namespace SocketMessagingShared.Components
 {
     public class MessageObject : INetworkObject
     {

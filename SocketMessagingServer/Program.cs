@@ -16,11 +16,11 @@ namespace SocketMessagingServer
         {
             Log.OnLog += HandleNetworkLog;
             Log.SetHiddenFlag(LogSeverity.Debug);
-            UserdataManager.SyncUsersToList();
+            DataManager.SyncLists();
             NetworkServer.ClientType = typeof(MessagingClient);
             NetworkServer.DefaultReady = false;
-            NetworkServer.StartServer();
             NetworkServer.ClientConnected += ClientConnected;
+            MessagingServer.StartServer();
         }
 
         private static void ClientConnected(int obj)
