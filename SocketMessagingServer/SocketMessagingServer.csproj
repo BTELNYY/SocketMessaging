@@ -49,7 +49,11 @@
     <Compile Include="CustomServerSideClientEventHandler.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="ServerData\UserdataManager.cs" />
+    <Compile Include="ServerData\Channels\ChannelData.cs" />
+    <Compile Include="ServerData\ConfigFile.cs" />
+    <Compile Include="ServerData\Groups\GroupData.cs" />
+    <Compile Include="ServerData\Permissions\PermissionData.cs" />
+    <Compile Include="ServerData\DataManager.cs" />
     <Compile Include="ServerData\Users\UserProfile.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -66,5 +70,6 @@
       <Name>SocketMessagingShared</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

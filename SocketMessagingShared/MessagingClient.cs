@@ -1,5 +1,6 @@
 ﻿using SocketNetworking;
 using SocketNetworking.Attributes;
+using SocketMessagingShared.Components;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -7,6 +8,7 @@ using System.Linq;
 using System.Security.Policy;
 using System.Text;
 using System.Threading.Tasks;
+using SocketMessagingShared.CustomTypes;
 
 namespace SocketMessagingShared
 {
@@ -20,23 +22,50 @@ namespace SocketMessagingShared
 
         public ClientEventHandler EventHandler { get; set; } = new ClientEventHandler();
 
+        public NetworkChannelController ClientChannelController
+        {
+            get
+            {
+                if(NetworkManager.WhereAmI == ClientLocation.Remote)
+                {
+                    Log.GlobalWarning("tried to get client channel controller on the server!");
+                    return MessagingServer.NetworkChannelController;
+                }
+                return _controller;
+            }
+            set
+            {
+                _controller = value;
+            }
+        }
+
+        private NetworkChannelController _controller;
+
+        [NetworkInvocable(PacketDirection.Server)]
+        private void ClientCreateChannelController(int networkId)
+        {
+            _controller = new NetworkChannelController();
+            _controller.SetNetID(networkId);
+        }
+
         private void CreateUserObject(ConnectionState obj)
         {
             if(obj != ConnectionState.Connected)
             {
                 return;
             }
-            _user = new MessagingUser(this);
+            _user = new NetworkUser(this);
             NetworkManager.AddNetworkObject(_user);
             if(CurrnetClientLocation == ClientLocation.Remote)
             {
                 ServerNotifyClientAdded(_user);
+                
             }
         }
 
-        private MessagingUser _user;
+        private NetworkUser _user;
 
-        public MessagingUser User 
+        public NetworkUser User 
         {
             get    
             {
@@ -60,12 +89,12 @@ namespace SocketMessagingShared
             return NetworkInvoke<bool>(nameof(ServerCreateAccountCommand), new object[] { loginData });
         }
 
-        public void ServerNotifyClientAdded(MessagingUser user)
+        public void ServerNotifyClientAdded(NetworkUser user)
         {
             NetworkInvoke(nameof(ClientAddedRpc), new object[] { user.NetworkID, user.OwnerClientID });
         }
 
-        public void ServerNotifyClientRemoved(MessagingUser user)
+        public void ServerNotifyClientRemoved(NetworkUser user)
         {
             NetworkInvoke(nameof(ClientRemovedRpc), new object[] { user.NetworkID });
         }
@@ -113,14 +142,14 @@ namespace SocketMessagingShared
         [NetworkInvocable(PacketDirection.Server)]
         void ClientAddedRpc(int id, int ownerId)
         {
-            MessagingUser user = new MessagingUser(id, ownerId);
+            NetworkUser user = new NetworkUser(id, ownerId);
             NetworkManager.AddNetworkObject(user);
         }
 
         [NetworkInvocable(PacketDirection.Server)]
         void ClientRemovedRpc(int id)
         {
-            MessagingUser user = MessagingUser.Users.Where(x => x.NetworkID == id).FirstOrDefault();
+            NetworkUser user = NetworkUser.Users.Where(x => x.NetworkID == id).FirstOrDefault();
             if(user == null)
             {
                 return;

@@ -41,10 +41,13 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="MessageObject.cs" />
-    <Compile Include="LoginData.cs" />
+    <Compile Include="Components\MessageObject.cs" />
+    <Compile Include="Components\NetworkMessageController.cs" />
+    <Compile Include="CustomTypes\LoginData.cs" />
     <Compile Include="MessagingClient.cs" />
-    <Compile Include="MessagingUser.cs" />
+    <Compile Include="MessagingServer.cs" />
+    <Compile Include="Components\NetworkUser.cs" />
+    <Compile Include="Components\NetworkChannelController.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ClientEventHandler.cs" />
   </ItemGroup>

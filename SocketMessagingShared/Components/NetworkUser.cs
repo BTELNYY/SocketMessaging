@@ -7,27 +7,27 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SocketMessagingShared
+namespace SocketMessagingShared.Components
 {
-    public class MessagingUser : MessageObject
+    public class NetworkUser : MessageObject
     {
-        public static List<MessagingUser> Users = new List<MessagingUser>();
+        public static List<NetworkUser> Users = new List<NetworkUser>();
 
-        public MessagingUser() { }
+        public NetworkUser() { }
 
-        public MessagingUser(MessagingClient client)
+        public NetworkUser(MessagingClient client)
         {
             Client = client;
             _id = NetworkManager.GetNextNetworkID();
             _ownerId = Client.ClientID;
         }
 
-        public MessagingUser(int id)
+        public NetworkUser(int id)
         {
             _id = id;
         }
 
-        public MessagingUser(int id, int ownerId)
+        public NetworkUser(int id, int ownerId)
         {
             _id = id;
             _ownerId = ownerId;
