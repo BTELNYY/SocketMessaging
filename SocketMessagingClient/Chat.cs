@@ -17,9 +17,9 @@ namespace SocketMessagingClient
             InitializeComponent();
         }
 
-        private void textBox1_TextChanged(object sender, EventArgs e)
+        private void Chat_Load(object sender, EventArgs e)
         {
-            this.BackColor = Color.White;
+
         }
     }
 }

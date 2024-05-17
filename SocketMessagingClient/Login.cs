@@ -17,13 +17,24 @@ namespace SocketMessagingClient
             InitializeComponent();
         }
 
-        private void Login_Load(object sender, EventArgs e)
+        private void panel1_Paint(object sender, PaintEventArgs e)
         {
-            BackColor = Color.FromArgb(39, 40, 41);
+            panel1.Location = new Point((ClientSize.Width - panel1.Size.Width)/2, ((ClientSize.Height - ClientSize.Height)/2)-3);
+            panel1.Size = new Size((ClientSize.Width - 80 % ClientSize.Width), ClientSize.Height+6) ;
+            panel1.BackColor = Color.FromArgb(39, 40, 41);
+            int thickness = 3;
+            int halfThickness = thickness / 2;
+            using (Pen p = new Pen(Color.FromArgb(216, 217, 218), thickness))
+            {
+                e.Graphics.DrawRectangle(p, new Rectangle(halfThickness,
+                                                          halfThickness,
+                                                          panel1.ClientSize.Width - thickness,
+                                                          panel1.ClientSize.Height - thickness));
+            }
         }
-
         private void textBox1_TextChanged(object sender, EventArgs e)
         {
+            this.textBox1.Size = new Size(120,300);
         }
     }
 }
