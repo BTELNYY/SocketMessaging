@@ -1,5 +1,7 @@
 ﻿using SocketMessagingServer.ServerData;
+using SocketMessagingServer.ServerData.Users;
 using SocketMessagingShared;
+using SocketMessagingShared.CustomTypes;
 using SocketNetworking;
 using System;
 using System.Collections.Generic;
@@ -26,7 +28,30 @@ namespace SocketMessagingServer
         private static void ClientConnected(int obj)
         {
             MessagingClient client = (MessagingClient)NetworkServer.GetClient(obj);
-            client.EventHandler = new CustomServerSideClientEventHandler();
+            client.OnValidateLogin = ValidateLogin;
+            client.OnUserCreateAccount = CreateAccount;
+        }
+
+        private static bool ValidateLogin(MessagingClient client, LoginData data, out string reason)
+        {
+            UserProfile profile = DataManager.GetProfileByUsername(data.Username);
+            if (profile == null)
+            {
+                reason = "Username or password is incorrect.";
+                return false;
+            }
+            if (profile.PasswordHash != data.PasswordHash)
+            {
+                reason = "Username or password is incorrect.";
+                return false;
+            }
+            reason = string.Empty;
+            return true;
+        }
+        
+        private static bool CreateAccount(MessagingClient client, LoginData data, out string reason)
+        {
+            return DataManager.CreateProfile(data.Username, data.PasswordHash, out reason);
         }
 
         private static void HandleNetworkLog(LogData data)

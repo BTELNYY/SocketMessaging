@@ -9,6 +9,8 @@ using System.Security.Policy;
 using System.Text;
 using System.Threading.Tasks;
 using SocketMessagingShared.CustomTypes;
+using System.Security;
+using System.Security.Permissions;
 
 namespace SocketMessagingShared
 {
@@ -20,7 +22,17 @@ namespace SocketMessagingShared
             this.ConnectionStateUpdated += CreateUserObject;
         }
 
-        public ClientEventHandler EventHandler { get; set; } = new ClientEventHandler();
+        public delegate bool ValidateLoginDelegate(MessagingClient client, LoginData data, out string reason);
+        public ValidateLoginDelegate OnValidateLogin { get; set; } = null;
+
+        public delegate bool UserCreateAccountDelegate(MessagingClient client, LoginData data, out string reason);
+        public UserCreateAccountDelegate OnUserCreateAccount { get; set; } = null;
+
+        public delegate void UserFailLogin(NetworkClient client, string reason);
+        public UserFailLogin OnUserLoginFail { get; set; } = null;
+
+        public delegate void UserFailAccountCreation(NetworkClient client, string reason);
+        public UserFailAccountCreation OnUserFailAccountCreation { get; set; } = null;
 
         public NetworkChannelController ClientChannelController
         {
@@ -59,7 +71,6 @@ namespace SocketMessagingShared
             if(CurrnetClientLocation == ClientLocation.Remote)
             {
                 ServerNotifyClientAdded(_user);
-                
             }
         }
 
@@ -102,11 +113,16 @@ namespace SocketMessagingShared
         [NetworkInvocable(PacketDirection.Client)]
         private bool ServerPerformLoginCommand(LoginData data)
         {
-            if (!EventHandler.ValidateLogin(data, out string reason))
+            if (OnValidateLogin != null)
             {
-                Log.GlobalInfo($"Rejecting client login from {ClientID} becuase: {reason}");
-                NetworkInvoke(this, nameof(ClientLoginFail), new string[] { reason });
-                return false;
+                bool result = OnValidateLogin.Invoke(this, data, out string reason);
+                if (!result)
+                {
+                    OnUserLoginFail?.Invoke(this, reason);
+                    Log.GlobalInfo($"Rejecting client login from {ClientID} becuase: {reason}");
+                    NetworkInvoke(this, nameof(ClientLoginFail), new string[] { reason });
+                    return false;
+                }
             }
             Log.GlobalInfo($"User '{data.Username}' logged in with ClientID {ClientID}");
             User.ServerSetUsername(data.Username);
@@ -118,16 +134,21 @@ namespace SocketMessagingShared
         private void ClientLoginFail(string reason)
         {
             Log.GlobalError("Login failed: " + reason);
-            EventHandler.ClientFailLogin(reason);
+            OnUserLoginFail?.Invoke(this, reason);
         }
 
         [NetworkInvocable(PacketDirection.Client)]
         private bool ServerCreateAccountCommand(LoginData data)
         {
-            if(!EventHandler.ServerCreateAccount(data.Username, data.PasswordHash, out string reason))
+            if (OnUserCreateAccount != null)
             {
-                NetworkInvoke(nameof(ClientFailAccountCreation), new object[] { reason });
-                return false;
+                bool result = OnUserCreateAccount.Invoke(this, data, out string message);
+                if (!result)
+                {
+                    OnUserFailAccountCreation?.Invoke(this, message);
+                    NetworkInvoke(nameof(ClientFailAccountCreation), new string[] { message });
+                    return false;
+                }
             }
             return true;
         }
@@ -135,8 +156,8 @@ namespace SocketMessagingShared
         [NetworkInvocable(PacketDirection.Server)]
         private void ClientFailAccountCreation(string reason)
         {
+            OnUserFailAccountCreation?.Invoke(this, reason);
             Log.GlobalError("Failed to create account. Reason: " + reason);
-            EventHandler.ClientFailCreatingNewAccount(reason);
         }
 
         [NetworkInvocable(PacketDirection.Server)]
