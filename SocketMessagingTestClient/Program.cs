@@ -23,7 +23,6 @@ namespace SocketMessagingTestClient
             MyClient.InitLocalClient();
             MyClient.Connect("127.0.0.1", 7777, "");
             NetworkClient.ClientConnectionStateChanged += ClientFullyConnected;
-            MyClient.EventHandler = new CustomClientEventHandler();
             Thread console = new Thread(HandleConsole);
             console.Start();
         }

@@ -1,8 +1,12 @@
 ﻿using SocketMessagingServer.ServerData;
+using SocketMessagingServer.ServerData.Channels;
+using SocketMessagingServer.ServerData.Users;
 using SocketMessagingShared;
+using SocketMessagingShared.CustomTypes;
 using SocketNetworking;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Security.Cryptography.X509Certificates;
 using System.Text;
@@ -20,13 +24,49 @@ namespace SocketMessagingServer
             NetworkServer.ClientType = typeof(MessagingClient);
             NetworkServer.DefaultReady = false;
             NetworkServer.ClientConnected += ClientConnected;
+            MessagingServer.PrepareServer();
+            foreach(string dir in Directory.GetDirectories(DataManager.ChannelDataDirectory))
+            {
+                string guid = dir.Split(',').Last().Trim('\\');
+                ChannelData data = new ChannelData();
+                data.PermanentID = guid;
+                ChannelData actualData = DataManager.GetConfigItem(data);
+                NetworkChannel netChannel = new NetworkChannel();
+                netChannel.GUID = guid;
+                netChannel.Name = data.ChannelName;
+                netChannel.Description = actualData.Description;
+                MessagingServer.NetworkChannelController.ServerAddNetworkChannel(netChannel);
+            }
             MessagingServer.StartServer();
         }
 
         private static void ClientConnected(int obj)
         {
             MessagingClient client = (MessagingClient)NetworkServer.GetClient(obj);
-            client.EventHandler = new CustomServerSideClientEventHandler();
+            client.OnValidateLogin = ValidateLogin;
+            client.OnUserCreateAccount = CreateAccount;
+        }
+
+        private static bool ValidateLogin(MessagingClient client, LoginData data, out string reason)
+        {
+            UserProfile profile = DataManager.GetProfileByUsername(data.Username);
+            if (profile == null)
+            {
+                reason = "Username or password is incorrect.";
+                return false;
+            }
+            if (profile.PasswordHash != data.PasswordHash)
+            {
+                reason = "Username or password is incorrect.";
+                return false;
+            }
+            reason = string.Empty;
+            return true;
+        }
+        
+        private static bool CreateAccount(MessagingClient client, LoginData data, out string reason)
+        {
+            return DataManager.CreateProfile(data.Username, data.PasswordHash, out reason);
         }
 
         private static void HandleNetworkLog(LogData data)
