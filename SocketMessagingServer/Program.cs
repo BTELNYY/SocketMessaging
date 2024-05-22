@@ -1,10 +1,12 @@
 ﻿using SocketMessagingServer.ServerData;
+using SocketMessagingServer.ServerData.Channels;
 using SocketMessagingServer.ServerData.Users;
 using SocketMessagingShared;
 using SocketMessagingShared.CustomTypes;
 using SocketNetworking;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Security.Cryptography.X509Certificates;
 using System.Text;
@@ -22,6 +24,19 @@ namespace SocketMessagingServer
             NetworkServer.ClientType = typeof(MessagingClient);
             NetworkServer.DefaultReady = false;
             NetworkServer.ClientConnected += ClientConnected;
+            MessagingServer.PrepareServer();
+            foreach(string dir in Directory.GetDirectories(DataManager.ChannelDataDirectory))
+            {
+                string guid = dir.Split(',').Last().Trim('\\');
+                ChannelData data = new ChannelData();
+                data.PermanentID = guid;
+                ChannelData actualData = DataManager.GetConfigItem(data);
+                NetworkChannel netChannel = new NetworkChannel();
+                netChannel.GUID = guid;
+                netChannel.Name = data.ChannelName;
+                netChannel.Description = actualData.Description;
+                MessagingServer.NetworkChannelController.ServerAddNetworkChannel(netChannel);
+            }
             MessagingServer.StartServer();
         }
 

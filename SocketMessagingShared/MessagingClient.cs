@@ -50,7 +50,7 @@ namespace SocketMessagingShared
                 _controller = value;
             }
         }
-
+        
         private NetworkChannelController _controller;
 
         [NetworkInvocable(PacketDirection.Server)]
@@ -118,9 +118,9 @@ namespace SocketMessagingShared
                 bool result = OnValidateLogin.Invoke(this, data, out string reason);
                 if (!result)
                 {
-                    OnUserLoginFail?.Invoke(this, reason);
-                    Log.GlobalInfo($"Rejecting client login from {ClientID} becuase: {reason}");
+                    Log.GlobalWarning($"Rejecting client login from {ClientID} becuase: {reason}");
                     NetworkInvoke(this, nameof(ClientLoginFail), new string[] { reason });
+                    OnUserLoginFail?.Invoke(this, reason);
                     return false;
                 }
             }

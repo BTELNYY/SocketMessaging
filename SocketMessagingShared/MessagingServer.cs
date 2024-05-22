@@ -12,10 +12,14 @@ namespace SocketMessagingShared
     {
         public static NetworkChannelController NetworkChannelController { get; private set; }
 
-        public new static void StartServer()
+        public static void PrepareServer()
         {
             NetworkChannelController = new NetworkChannelController();
             NetworkManager.AddNetworkObject(NetworkChannelController);
+        }
+
+        public new static void StartServer()
+        {
             NetworkServer.StartServer();
         }
     }

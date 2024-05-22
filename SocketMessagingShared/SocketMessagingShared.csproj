@@ -44,6 +44,8 @@
     <Compile Include="Components\MessageObject.cs" />
     <Compile Include="Components\NetworkMessageController.cs" />
     <Compile Include="CustomTypes\LoginData.cs" />
+    <Compile Include="CustomTypes\NetworkChannel.cs" />
+    <Compile Include="CustomTypes\NetworkMessage.cs" />
     <Compile Include="MessagingClient.cs" />
     <Compile Include="MessagingServer.cs" />
     <Compile Include="Components\NetworkUser.cs" />
