@@ -1,9 +1,11 @@
 ﻿using SocketMessagingShared;
+using SocketMessagingShared.CustomTypes;
 using SocketNetworking;
 using System;
 using System.Collections.Generic;
 using System.Data.SqlTypes;
 using System.Linq;
+using System.Net.NetworkInformation;
 using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Threading;
@@ -64,6 +66,14 @@ namespace SocketMessagingTestClient
                         {
                             Console.WriteLine("Account created! Username: " + newUsername);
                         }
+                        break;
+                    case "channels":
+                        foreach(NetworkChannel channel in MyClient.ClientChannelController.Channels)
+                        {
+                            Console.WriteLine($"Name: {channel.Name}, GUID: {channel.Description}, Description: {channel.Description}");
+                        }
+                        break;
+                    case "createchannel":
                         break;
                     default:
                         WriteLineColor("Unkown Command: " + command[0], ConsoleColor.Red);
