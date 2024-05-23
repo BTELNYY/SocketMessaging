@@ -9,6 +9,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Windows.Forms.VisualStyles;
+using SocketNetworking;
 
 namespace SocketMessagingClient
 {
@@ -54,20 +55,26 @@ namespace SocketMessagingClient
             
         }
 
-        private void button1_MouseHover(object sender, EventArgs e)
-        {
-            button1.Location = new Point((ClientSize.Width - panel1.Size.Width)/2 + 3, 143);
-            button1.Size = new Size(287, 26);
-        }
-
-        private void button1_MouseLeave(object sender, EventArgs e)
-        {
-            button1.Size = new Size(194, 26); 
-            button1.Location = new Point(90, 143);
-        }
-
         private void textBox3_KeyPress(object sender, KeyPressEventArgs e)
         {
+        }
+
+        private void numericUpDown1_ValueChanged(object sender, EventArgs e)
+        {
+            
+        }
+
+        private void textBox4_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            if (textBox1 != null && textBox2 != null && textBox3 != null && textBox4 != null && textBox5 != null && textBox6 != null)
+            {
+                Program.MyClinet.Connect(textBox1.Text + textBox4.Text + textBox5.Text + textBox6.Text, int.Parse(textBox3.Text), textBox2.Text);
+            }
         }
     }
 }
