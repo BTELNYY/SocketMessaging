@@ -58,6 +58,7 @@ namespace SocketMessagingShared
         {
             _controller = new NetworkChannelController();
             _controller.SetNetID(networkId);
+            _controller.LocalClient = this;
         }
 
         private void CreateUserObject(ConnectionState obj)
