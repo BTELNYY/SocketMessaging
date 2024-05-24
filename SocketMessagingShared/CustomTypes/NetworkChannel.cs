@@ -1,4 +1,5 @@
 ﻿using SocketNetworking.PacketSystem;
+using SocketNetworking.PacketSystem.TypeWrappers;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,12 +16,15 @@ namespace SocketMessagingShared.CustomTypes
 
         public string GUID { get; set; } = string.Empty;
 
+        public List<NetworkMessage> NetworkMessages { get; set; } = new List<NetworkMessage>();
+
         public int Deserialize(byte[] data)
         {
             ByteReader reader = new ByteReader(data);
             Name = reader.ReadString();
             Description = reader.ReadString();
             GUID = reader.ReadString();
+            NetworkMessages = reader.Read<SerializableList<NetworkMessage>>().ToList();
             return reader.ReadBytes;
         }
 
@@ -35,6 +39,9 @@ namespace SocketMessagingShared.CustomTypes
             writer.WriteString(Name);
             writer.WriteString(Description);
             writer.WriteString(GUID);
+            SerializableList<NetworkMessage> messages = new SerializableList<NetworkMessage>();
+            messages.OverwriteContained(messages);
+            writer.Write<SerializableList<NetworkMessage>>(messages);
             return writer.Data;
         }
     }

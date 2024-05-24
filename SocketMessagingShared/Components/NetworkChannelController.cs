@@ -50,6 +50,16 @@ namespace SocketMessagingShared.Components
         /// </summary>
         public event Action<NetworkChannel> ServerChannelDestroyed;
 
+        /// <summary>
+        /// Called on the server when: a message has been replicated accross the network. Called on the client when the message has been approved by the server.
+        /// </summary>
+        public event Action<NetworkChannel, NetworkMessage> MessageSent;
+
+        /// <summary>
+        /// Called on the Client only when a new message has been receieved from the server.
+        /// </summary>
+        public event Action<NetworkChannel, NetworkMessage> MessegeRecieved;
+
         public delegate bool ClientCreateChannelReciever(MessagingClient client, string name, string Descrption);
         public ClientCreateChannelReciever OnClientCreateChannel { get; set; } = null;
 
@@ -140,7 +150,12 @@ namespace SocketMessagingShared.Components
             {
                 return false;
             }
-            return NetworkManager.NetworkInvoke<bool>(this, LocalClient, nameof(ServerGetMessageRequest), new object[] { target, message });
+            bool result = NetworkManager.NetworkInvoke<bool>(this, LocalClient, nameof(ServerGetMessageRequest), new object[] { target, message });
+            if (result)
+            {
+                MessageSent?.Invoke(target, message);
+            }
+            return result;
         }
 
         [NetworkInvocable(PacketDirection.Client)]
@@ -155,8 +170,46 @@ namespace SocketMessagingShared.Components
                     return false;
                 }
             }
-            //do message stuff (later)
+            MessageSent?.Invoke(target, message);
+            ServerSendMessage(target, message);
             return true;
+        }
+
+        public void ServerSendMessage(NetworkChannel channel, NetworkMessage message)
+        {
+            MessagingServer.NetworkInvokeOnAll(this, nameof(ClientGetMessageUpdate), new object[] { channel, message });
+        }
+
+        [NetworkInvocable(PacketDirection.Server)]
+        private void ClientGetMessageUpdate(NetworkChannel target, NetworkMessage message)
+        {
+            NetworkChannel localTarget = _channels.Where(x => x.GUID == target.GUID).FirstOrDefault();
+            if(localTarget == null)
+            {
+                Log.GlobalWarning("failed to find channel with GUID: " + target.GUID + "\n Client and server are out of sync, some messages have been lost.");
+                _channels.OverwriteContained(ClientGetChannels());
+                return;
+            }
+            int index = _channels.IndexOf(localTarget);
+            _channels[index].NetworkMessages.Add(message);
+            MessegeRecieved?.Invoke(target, message);
+        }
+
+        public List<NetworkChannel> ClientGetChannels()
+        {
+            return LocalClient.NetworkInvoke<SerializableList<NetworkChannel>>(nameof(ServerSendChannelsRequest), new object[] { }).ToList();
+        }
+
+        [NetworkInvocable(PacketDirection.Client)]
+        private SerializableList<NetworkChannel> ServerSendChannelsRequest(NetworkClient client)
+        {
+            if (!client.Ready)
+            {
+                return new SerializableList<NetworkChannel>();
+            }
+            SerializableList<NetworkChannel> channels = new SerializableList<NetworkChannel>();
+            channels.OverwriteContained(_channels);
+            return channels;
         }
 
         public bool ClientCreateChannel(string name, string description, out NetworkChannel channel)
