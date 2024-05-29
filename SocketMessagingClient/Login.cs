@@ -71,9 +71,9 @@ namespace SocketMessagingClient
 
         private void button1_Click(object sender, EventArgs e)
         {
-            if (textBox1 != null && textBox2 != null && textBox3 != null && textBox4 != null && textBox5 != null && textBox6 != null)
+            if (textBox1.Text != string.Empty && textBox2.Text != string.Empty && textBox3.Text != string.Empty && textBox4.Text != string.Empty && textBox5.Text != string.Empty && textBox6.Text != string.Empty)
             {
-                Program.MyClinet.Connect(textBox1.Text + textBox4.Text + textBox5.Text + textBox6.Text, int.Parse(textBox3.Text), textBox2.Text);
+                Program.MyClinet.Connect(textBox1.Text + "." + textBox4.Text + "." + textBox5.Text + "." + textBox6.Text, int.Parse(textBox3.Text), textBox2.Text);
             }
         }
     }
