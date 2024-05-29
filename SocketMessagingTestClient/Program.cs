@@ -20,13 +20,23 @@ namespace SocketMessagingTestClient
         public static void Main(string[] args)
         {
             Log.OnLog += HandleNetworkLog;
-            Log.SetHiddenFlag(LogSeverity.Debug);
+            //Log.SetHiddenFlag(LogSeverity.Debug);
             MyClient = new MessagingClient();
             MyClient.InitLocalClient();
             MyClient.Connect("127.0.0.1", 7777, "");
+            MyClient.ConnectionStateUpdated += MyClient_ConnectionStateUpdated;
             NetworkClient.ClientConnectionStateChanged += ClientFullyConnected;
             Thread console = new Thread(HandleConsole);
             console.Start();
+        }
+
+        private static void MyClient_ConnectionStateUpdated(ConnectionState obj)
+        {
+            if(obj != ConnectionState.Connected)
+            {
+                return;
+            }
+            //Do login
         }
 
         static void HandleConsole()

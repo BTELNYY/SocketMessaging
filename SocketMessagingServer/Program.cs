@@ -10,6 +10,7 @@ using System.IO;
 using System.Linq;
 using System.Security.Cryptography.X509Certificates;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace SocketMessagingServer
@@ -19,7 +20,7 @@ namespace SocketMessagingServer
         public static void Main(string[] args)
         {
             Log.OnLog += HandleNetworkLog;
-            Log.SetHiddenFlag(LogSeverity.Debug);
+            //Log.SetHiddenFlag(LogSeverity.Debug);
             DataManager.SyncLists();
             NetworkServer.ClientType = typeof(MessagingClient);
             NetworkServer.DefaultReady = false;
@@ -38,6 +39,38 @@ namespace SocketMessagingServer
                 MessagingServer.NetworkChannelController.ServerAddNetworkChannel(netChannel);
             }
             MessagingServer.StartServer();
+            Thread console = new Thread(HandleConsole);
+            console.Start();
+        }
+
+        private static void HandleConsole()
+        {
+            while (true)
+            {
+                string input = Console.ReadLine();
+                string[] inputparsed = input.Split(' ');
+                switch(inputparsed[0])
+                {
+                    case "createchannel":
+                        if(inputparsed.Length < 3) 
+                        {
+                            WriteLineColor("Incorrect Syntax! Use: createchannel <channel> <description>", ConsoleColor.Red);
+                            break;
+                        }
+                        string name = inputparsed[1];
+                        string description = inputparsed[2];
+                        NetworkChannel channel = new NetworkChannel();
+                        channel.Name = name;
+                        channel.Description = description;
+                        channel.GUID = Guid.NewGuid().ToString();
+                        MessagingServer.NetworkChannelController.ServerAddNetworkChannel(channel);
+                        Console.WriteLine("Done!");
+                        break;
+                    default:
+                        WriteLineColor($"No such command '{inputparsed[0]}'", ConsoleColor.Red);
+                        break;
+                }
+            }
         }
 
         private static void ClientConnected(int obj)
