@@ -42,6 +42,23 @@ namespace SocketMessagingShared.Components
 
         SerializableList<NetworkChannel> _channels { get; set; } = new SerializableList<NetworkChannel>();
 
+        public List<NetworkChannel> NetworkChannels
+        {
+            get
+            {
+                return _channels.ToList();
+            }
+            set
+            {
+                if(NetworkManager.WhereAmI == ClientLocation.Local)
+                {
+                    throw new InvalidOperationException("Cannnot overwrite NetworkChannels on the client becuase desync will occur.");
+                }
+                _channels.OverwriteContained(value);
+                ServerSyncChannels();
+            }
+        }
+
         /// <summary>
         /// Invoked when the Server has added a <see cref="NetworkChannel"/> and it is avilable on the clients.
         /// </summary>
