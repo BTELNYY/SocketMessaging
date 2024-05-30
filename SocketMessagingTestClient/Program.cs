@@ -15,7 +15,7 @@ namespace SocketMessagingTestClient
 {
     public class Program
     {
-        static MessagingClient MyClient;
+        public static MessagingClient MyClient;
 
         public static void Main(string[] args)
         {
