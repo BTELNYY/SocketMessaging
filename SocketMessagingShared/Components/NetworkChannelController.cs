@@ -181,6 +181,16 @@ namespace SocketMessagingShared.Components
             return true;
         }
 
+        public void ServerSendMessage(NetworkChannel channel, string text)
+        {
+            NetworkMessage message = new NetworkMessage();
+            message.AuthorName = "Server";
+            message.AuthorUUID = "0";
+            message.Content = text;
+            message.Timestamp = DateTime.UtcNow.ToUnixTimestamp();
+            ServerSendMessage(channel, message);
+        }
+
         public void ServerSendMessage(NetworkChannel channel, NetworkMessage message)
         {
             MessagingServer.NetworkInvokeOnAll(this, nameof(ClientGetMessageUpdate), new object[] { channel, message });

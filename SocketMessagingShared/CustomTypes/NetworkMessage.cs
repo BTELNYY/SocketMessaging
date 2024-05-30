@@ -15,7 +15,7 @@ namespace SocketMessagingShared.CustomTypes
 
         public string AuthorName { get; set; } = string.Empty;
 
-        public ulong Timestamp { get; set; } = 0;
+        public long Timestamp { get; set; } = 0;
 
         public virtual int Deserialize(byte[] data)
         {
@@ -23,7 +23,7 @@ namespace SocketMessagingShared.CustomTypes
             Content = reader.ReadString();
             AuthorUUID = reader.ReadString();
             AuthorName = reader.ReadString();
-            Timestamp = reader.ReadULong();
+            Timestamp = reader.ReadLong();
             return reader.ReadBytes;
         }
 
@@ -38,7 +38,7 @@ namespace SocketMessagingShared.CustomTypes
             writer.WriteString(Content);
             writer.WriteString(AuthorUUID);
             writer.WriteString(AuthorName);
-            writer.WriteULong(Timestamp);
+            writer.WriteLong(Timestamp);
             return writer.Data;
         }
     }
