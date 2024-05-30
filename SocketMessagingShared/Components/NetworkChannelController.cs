@@ -20,6 +20,7 @@ namespace SocketMessagingShared.Components
         public NetworkChannelController() 
         {
             _netId = NetworkManager.GetNextNetworkID();
+            EnsureRegistered();
         }
 
         private int _netId = 0;
@@ -27,6 +28,7 @@ namespace SocketMessagingShared.Components
         public void SetNetID(int id)
         {
             _netId = id;
+            EnsureRegistered();
         }
 
         public override int NetworkID => _netId;
@@ -128,6 +130,10 @@ namespace SocketMessagingShared.Components
             }
             else
             {
+                if (!target.Ready)
+                {
+                    return;
+                }
                 target.NetworkInvoke(this, nameof(ClientGetChannelList), new object[] { _channels });
             }
         }

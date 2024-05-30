@@ -80,7 +80,7 @@ namespace SocketMessagingTestClient
                     case "channels":
                         foreach(NetworkChannel channel in MyClient.ClientChannelController.Channels)
                         {
-                            Console.WriteLine($"Name: {channel.Name}, GUID: {channel.Description}, Description: {channel.Description}");
+                            Console.WriteLine($"Name: {channel.Name}, GUID: {channel.GUID}, Description: {channel.Description}");
                         }
                         break;
                     case "createchannel":

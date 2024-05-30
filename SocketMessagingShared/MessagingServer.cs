@@ -15,7 +15,6 @@ namespace SocketMessagingShared
         public static void PrepareServer()
         {
             NetworkChannelController = new NetworkChannelController();
-            NetworkManager.AddNetworkObject(NetworkChannelController);
         }
 
         public new static void StartServer()

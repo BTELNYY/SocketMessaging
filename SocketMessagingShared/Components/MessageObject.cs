@@ -18,6 +18,27 @@ namespace SocketMessagingShared.Components
 
         public virtual bool IsEnabled => true;
 
+        public void EnsureRegistered(bool modifyNetworId = true)
+        {
+            if (NetworkManager.IsRegistered(this))
+            {
+                if (modifyNetworId)
+                {
+                    NetworkManager.ModifyNetworkID(this);
+                }
+                return;
+            }
+            NetworkManager.AddNetworkObject(this);
+        }
+
+        ~MessageObject()
+        {
+            if(NetworkManager.IsRegistered(this))
+            {
+                NetworkManager.RemoveNetworkObject(this);
+            }
+        }
+
         public virtual void OnAdded(INetworkObject addedObject)
         {
 
