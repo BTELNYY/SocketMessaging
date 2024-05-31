@@ -2,6 +2,7 @@
 using SocketMessagingServer.ServerData.Channels;
 using SocketMessagingServer.ServerData.Groups;
 using SocketMessagingServer.ServerData.Users;
+using SocketMessagingShared.CustomTypes;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -205,6 +206,25 @@ namespace SocketMessagingServer.ServerData
             UsernameToGuid.Add(profile.Username, profile.PermanentID);
             result = string.Empty;
             return true;
+        }
+
+        public static List<NetworkChannel> GetNetworkChannels()
+        {
+            List<string> dirs = Directory.GetDirectories(ChannelDataDirectory).ToList();
+            List<NetworkChannel> Channels = new List<NetworkChannel>();
+            foreach (string dir in dirs)
+            {
+                ChannelData data = new ChannelData();
+                string permId = dir.Split('/').Last().Trim('/');
+                data.PermanentID = permId;
+                ChannelData actualData = GetConfigItem(data);
+                NetworkChannel netChannel = new NetworkChannel();
+                netChannel.GUID = permId;
+                netChannel.Description = actualData.Description;
+                netChannel.Name = actualData.ChannelName;
+                Channels.Add(netChannel);
+            }
+            return Channels;
         }
     }
 }

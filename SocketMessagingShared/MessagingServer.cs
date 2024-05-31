@@ -15,6 +15,7 @@ namespace SocketMessagingShared
         public static void PrepareServer()
         {
             NetworkChannelController = new NetworkChannelController();
+
         }
 
         public new static void StartServer()
