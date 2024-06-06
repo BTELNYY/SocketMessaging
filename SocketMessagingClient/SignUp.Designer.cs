@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(SignUp));
             this.label6 = new System.Windows.Forms.Label();
             this.button2 = new System.Windows.Forms.Button();
             this.passwordtextbox = new System.Windows.Forms.TextBox();
@@ -36,7 +37,7 @@
             this.label3 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
-            this.textBox1 = new System.Windows.Forms.TextBox();
+            this.passwordtextbox2 = new System.Windows.Forms.TextBox();
             this.label7 = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
@@ -50,6 +51,7 @@
             this.label6.Size = new System.Drawing.Size(170, 15);
             this.label6.TabIndex = 18;
             this.label6.Text = "Already have account? Sign In";
+            this.label6.Click += new System.EventHandler(this.label6_Click);
             // 
             // button2
             // 
@@ -129,14 +131,14 @@
             this.label1.TabIndex = 10;
             this.label1.Text = "Sign Up";
             // 
-            // textBox1
+            // passwordtextbox2
             // 
-            this.textBox1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.textBox1.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.textBox1.Location = new System.Drawing.Point(108, 163);
-            this.textBox1.Name = "textBox1";
-            this.textBox1.Size = new System.Drawing.Size(172, 22);
-            this.textBox1.TabIndex = 20;
+            this.passwordtextbox2.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.passwordtextbox2.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.passwordtextbox2.Location = new System.Drawing.Point(108, 163);
+            this.passwordtextbox2.Name = "passwordtextbox2";
+            this.passwordtextbox2.Size = new System.Drawing.Size(172, 22);
+            this.passwordtextbox2.TabIndex = 20;
             // 
             // label7
             // 
@@ -155,7 +157,7 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(39)))), ((int)(((byte)(40)))), ((int)(((byte)(41)))));
             this.ClientSize = new System.Drawing.Size(384, 261);
-            this.Controls.Add(this.textBox1);
+            this.Controls.Add(this.passwordtextbox2);
             this.Controls.Add(this.label7);
             this.Controls.Add(this.label6);
             this.Controls.Add(this.button2);
@@ -165,8 +167,11 @@
             this.Controls.Add(this.label3);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.label1);
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "SignUp";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "SignUp";
+            this.Load += new System.EventHandler(this.SignUp_Load);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -182,7 +187,7 @@
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.TextBox textBox1;
+        private System.Windows.Forms.TextBox passwordtextbox2;
         private System.Windows.Forms.Label label7;
     }
 }
