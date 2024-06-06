@@ -1,5 +1,6 @@
 ﻿using SocketMessagingServer.ServerData;
 using SocketMessagingServer.ServerData.Channels;
+using SocketMessagingServer.ServerData.Messages;
 using SocketMessagingServer.ServerData.Users;
 using SocketMessagingShared;
 using SocketMessagingShared.CustomTypes;
@@ -26,7 +27,7 @@ namespace SocketMessagingServer
             NetworkServer.DefaultReady = false;
             NetworkServer.ClientConnected += ClientConnected;
             MessagingServer.PrepareServer();
-            foreach(string dir in Directory.GetDirectories(DataManager.ChannelDataDirectory))
+            foreach (string dir in Directory.GetDirectories(DataManager.ChannelDataDirectory))
             {
                 string guid = dir.Split(',').Last().Trim('\\');
                 ChannelData data = new ChannelData();
@@ -36,6 +37,10 @@ namespace SocketMessagingServer
                 netChannel.GUID = guid;
                 netChannel.Name = data.ChannelName;
                 netChannel.Description = actualData.Description;
+                foreach (NetworkMessage message in actualData.DiskChunks.Last().Messages)
+                {
+                    netChannel.NetworkMessages.Add(message);
+                }
                 MessagingServer.NetworkChannelController.ServerAddNetworkChannel(netChannel);
             }
             MessagingServer.StartServer();
@@ -65,6 +70,13 @@ namespace SocketMessagingServer
                         channel.GUID = Guid.NewGuid().ToString();
                         MessagingServer.NetworkChannelController.ServerAddNetworkChannel(channel);
                         Console.WriteLine("Done!");
+                        break;
+                    case "sendmessage":
+                        if(inputparsed.Length < 3)
+                        {
+                            WriteLineColor("Invalid Syntax. Use: sendmessage <channelname> <message>", ConsoleColor.Red);
+                            break;
+                        }
                         break;
                     default:
                         WriteLineColor($"No such command '{inputparsed[0]}'", ConsoleColor.Red);

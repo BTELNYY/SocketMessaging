@@ -1,4 +1,5 @@
-﻿using SocketMessagingServer.ServerData.Permissions;
+﻿using SocketMessagingServer.ServerData.Messages;
+using SocketMessagingServer.ServerData.Permissions;
 using System;
 using System.Collections.Generic;
 using System.Data.Odbc;
@@ -19,6 +20,36 @@ namespace SocketMessagingServer.ServerData.Channels
                 return Path.Combine(DataManager.ChannelDataDirectory, PermanentID);
             }
         }
+
+        private List<MessageFile> _messages = new List<MessageFile>();
+
+        public List<MessageFile> DiskChunks
+        {
+            get
+            {
+                List<MessageFile> chunks = new List<MessageFile>();
+                foreach(string file in System.IO.Directory.GetFiles(Directory))
+                {
+                    MessageFile chunk = DataManager.GetConfigItem<MessageFile>(file);
+                    if(chunk == null)
+                    {
+                        continue;
+                    }
+                    chunks.Insert(chunk.ChunkID, chunk);
+                }
+                _messages = chunks;
+                return chunks;
+            }
+        }
+
+        public List<MessageFile> CachedChunks
+        {
+            get
+            {
+                return _messages;
+            }
+        }
+
 
         public override string Filename => "meta" + ".json";
 

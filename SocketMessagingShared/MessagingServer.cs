@@ -15,12 +15,16 @@ namespace SocketMessagingShared
         public static void PrepareServer()
         {
             NetworkChannelController = new NetworkChannelController();
-
         }
 
         public new static void StartServer()
         {
             NetworkServer.StartServer();
+        }
+
+        public new static void StopServer()
+        {
+
         }
     }
 }

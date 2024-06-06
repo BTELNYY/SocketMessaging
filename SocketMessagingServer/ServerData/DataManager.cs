@@ -70,14 +70,14 @@ namespace SocketMessagingServer.ServerData
                     UsernameToGuid.Add(profile.Username, profile.PermanentID);
                 }
             }
-            foreach(string channel in Directory.GetFiles(ChannelDataDirectory))
+            foreach (string channel in Directory.GetFiles(ChannelDataDirectory))
             {
                 ChannelData dataChannel = new ChannelData();
                 dataChannel.PermanentID = channel.Split('.')[0];
                 ChannelData actualData = GetConfigItem<ChannelData>(dataChannel);
                 ChannelNameToGuidd.Add(actualData.ChannelName, actualData.PermanentID);
             }
-            foreach(string group in Directory.GetFiles(GroupDataDirectory))
+            foreach (string group in Directory.GetFiles(GroupDataDirectory))
             {
                 GroupData fakeGroup = new GroupData();
                 fakeGroup.PermanentID = group.Split('.')[0];
@@ -100,7 +100,24 @@ namespace SocketMessagingServer.ServerData
             }
             else
             {
-                return default (T);
+                return default(T);
+            }
+        }
+
+        public static T GetConfigItem<T>(string path) where T : ConfigFile
+        {
+            if (!File.Exists(path))
+            {
+                return default(T);
+            }
+            if (File.Exists(path))
+            {
+                T thing = JsonConvert.DeserializeObject<T>(path);
+                return thing;
+            }
+            else
+            {
+                return default(T);
             }
         }
 
