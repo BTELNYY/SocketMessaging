@@ -55,8 +55,9 @@ namespace SocketMessagingClient
 
         private async void label6_Click(object sender, EventArgs e)
         {
-            
-            this.Close();
+            this.Hide();
+            SignUp signUp = new SignUp();
+            signUp.Show();
         }
     }
 }
