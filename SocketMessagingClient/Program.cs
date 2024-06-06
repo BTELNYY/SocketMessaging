@@ -32,11 +32,15 @@ namespace SocketMessagingClient
 
         private static void HandleLogin(ConnectionState obj)
         {
-            if(obj != ConnectionState.Connected)
+            if (obj != ConnectionState.Connected)
             {
                 return;
             }
-            Application.Run(new Login());
+            else 
+            {
+                Application.Run(new Login());
+            }
+            
         }
 
         private static void ClientCreated(NetworkClient obj)
