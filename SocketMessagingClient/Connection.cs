@@ -53,8 +53,8 @@ namespace SocketMessagingClient
         private void Login_Load(object sender, EventArgs e)
         {
             try 
-            { Program.MyClinet.Connect("127.0.0.1", 7777, "");
-                this.Close();
+            { Program.MyClinet.Connect("127.0.0.10", 7777, "");
+               this.Close();
             } 
             catch 
             { 

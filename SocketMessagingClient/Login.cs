@@ -40,20 +40,22 @@ namespace SocketMessagingClient
 
         private async void button2_Click(object sender, EventArgs e)
         {
-            await Task.Run(() => 
-            {
                 if (usernametextbox.Text != string.Empty && passwordtextbox.Text != string.Empty)
                 {
                     bool LoginSucces = Program.MyClinet.ClientLogin(usernametextbox.Text, passwordtextbox.Text);
-                    if (LoginSucces)
+                    if (!LoginSucces)
                     {
-                        Console.WriteLine(Program.MyClinet.ClientID);
+                        this.Close();
+                    }
+                    else
+                    {
+                        label1.Visible = false;
+                        label2.Text = "Login Unsuccessful!";
                     }
                 }
-            });  
         }
 
-        private async void label6_Click(object sender, EventArgs e)
+        private void label6_Click(object sender, EventArgs e)
         {
             this.Hide();
             SignUp signUp = new SignUp();

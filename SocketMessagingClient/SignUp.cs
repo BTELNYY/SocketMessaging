@@ -19,24 +19,20 @@ namespace SocketMessagingClient
             InitializeComponent();
         }
 
-        private async void button2_Click(object sender, EventArgs e)
+        private void button2_Click(object sender, EventArgs e)
         {
             if (usernametextbox.Text != string.Empty && passwordtextbox.Text == passwordtextbox2.Text)
             {
-                await Task.Run(() =>
-                {
                     bool AccCreated = Program.MyClinet.ClientCreateAccount(usernametextbox.Text, passwordtextbox.Text);
-                    if (!AccCreated)
+                    if (AccCreated)
                     {
                         label1.Visible = false;
-                        label2.Text = $"Account with username: {usernametextbox} already exist";
+                        label2.Text = $"Account with username: {usernametextbox} already exist {AccCreated}";
                     }
                     else
                     {
                         LoginSwitcher();
                     }
-                });
-
             }
             else if (passwordtextbox.Text != passwordtextbox2.Text)
             {
@@ -51,9 +47,11 @@ namespace SocketMessagingClient
 
         private void LoginSwitcher()
         {
-            this.Close();
-            Login login = new Login();
-            login.Show();
+
+                this.Hide();
+                Login login = new Login();
+                login.Show();
+            
         }
 
         private void label6_Click(object sender, EventArgs e)
