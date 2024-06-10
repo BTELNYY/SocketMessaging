@@ -39,26 +39,27 @@ namespace SocketMessagingClient
 
         private void button2_Click(object sender, EventArgs e)
         {
-                if (usernametextbox.Text != string.Empty && passwordtextbox.Text != string.Empty)
+            if (usernametextbox.Text != string.Empty && passwordtextbox.Text != string.Empty)
+            {
+                bool LoginSucces = Program.MyClinet.ClientLogin(usernametextbox.Text, passwordtextbox.Text);
+                if (LoginSucces)
                 {
-                    bool LoginSucces = Program.MyClinet.ClientLogin(usernametextbox.Text, passwordtextbox.Text);
-                    if (LoginSucces)
-                    {
-                        this.Close();
-                    }
-                    else
-                    {
-                        label1.Visible = false;
-                        label2.Text = "Unsuccesful";
-                    }
+                    this.Hide();
                 }
+                else
+                {
+                    label1.Visible = false;
+                    label2.Text = "Unsuccesful";
+                }
+            }
         }
 
         private void label6_Click(object sender, EventArgs e)
         {
             this.Hide();
             SignUp signUp = new SignUp();
-            signUp.Show();
+            signUp.ShowDialog();
+            
         }
     }
 }

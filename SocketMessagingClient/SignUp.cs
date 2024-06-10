@@ -50,7 +50,7 @@ namespace SocketMessagingClient
 
                 this.Hide();
                 Login login = new Login();
-                login.Show();
+                login.ShowDialog();
             
         }
 
