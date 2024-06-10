@@ -20,7 +20,6 @@ namespace SocketMessagingClient
 
         private void Chat_Load(object sender, EventArgs e)
         {
-
         }
 
         private void label1_Click(object sender, EventArgs e)
@@ -38,7 +37,7 @@ namespace SocketMessagingClient
 
         }
 
-        private async void button2_Click(object sender, EventArgs e)
+        private void button2_Click(object sender, EventArgs e)
         {
                 if (usernametextbox.Text != string.Empty && passwordtextbox.Text != string.Empty)
                 {
@@ -50,7 +49,7 @@ namespace SocketMessagingClient
                     else
                     {
                         label1.Visible = false;
-                        label2.Text = "Login Unsuccessful!";
+                        label2.Text = "Unsuccesful";
                     }
                 }
         }
