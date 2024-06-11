@@ -51,7 +51,7 @@
     <Compile Include="ServerData\Channels\ChannelData.cs" />
     <Compile Include="ServerData\ConfigFile.cs" />
     <Compile Include="ServerData\Groups\GroupData.cs" />
-    <Compile Include="ServerData\Messages\MessageFile.cs" />
+    <Compile Include="ServerData\Messages\MessageChunkFile.cs" />
     <Compile Include="ServerData\Permissions\PermissionData.cs" />
     <Compile Include="ServerData\DataManager.cs" />
     <Compile Include="ServerData\Users\UserProfile.cs" />

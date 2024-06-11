@@ -21,16 +21,16 @@ namespace SocketMessagingServer.ServerData.Channels
             }
         }
 
-        private List<MessageFile> _messages = new List<MessageFile>();
+        private List<MessageChunkFile> _messages = new List<MessageChunkFile>();
 
-        public List<MessageFile> DiskChunks
+        public List<MessageChunkFile> DiskChunks
         {
             get
             {
-                List<MessageFile> chunks = new List<MessageFile>();
+                List<MessageChunkFile> chunks = new List<MessageChunkFile>();
                 foreach(string file in System.IO.Directory.GetFiles(Directory))
                 {
-                    MessageFile chunk = DataManager.GetConfigItem<MessageFile>(file);
+                    MessageChunkFile chunk = DataManager.GetConfigItem<MessageChunkFile>(file);
                     if(chunk == null)
                     {
                         continue;
@@ -42,7 +42,7 @@ namespace SocketMessagingServer.ServerData.Channels
             }
         }
 
-        public List<MessageFile> CachedChunks
+        public List<MessageChunkFile> CachedChunks
         {
             get
             {

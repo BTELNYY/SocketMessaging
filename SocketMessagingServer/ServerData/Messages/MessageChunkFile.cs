@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace SocketMessagingServer.ServerData.Messages
 {
-    public class MessageFile : ConfigFile
+    public class MessageChunkFile : ConfigFile
     {
         public override string Directory => Path.Combine(DataManager.ChannelDataDirectory, Channel);
 
