@@ -24,10 +24,10 @@ namespace SocketMessagingClient
             if (usernametextbox.Text != string.Empty && passwordtextbox.Text == passwordtextbox2.Text)
             {
                     bool AccCreated = Program.MyClinet.ClientCreateAccount(usernametextbox.Text, passwordtextbox.Text);
-                    if (AccCreated)
+                    if (!AccCreated)
                     {
                         label1.Visible = false;
-                        label2.Text = $"Account with username: {usernametextbox} already exist {AccCreated}";
+                        label2.Text = $"Account with username: {usernametextbox.Text} already exist {AccCreated}";
                     }
                     else
                     {
@@ -41,7 +41,7 @@ namespace SocketMessagingClient
             }
             else 
             {
-                label1.Text = "Username is Inco";
+                label1.Text = "Username is Incorrect";
             }
         }
 
