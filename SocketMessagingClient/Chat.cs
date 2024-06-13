@@ -10,6 +10,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using SocketMessagingShared;
 using SocketNetworking;
+using System.Runtime.Remoting.Channels;
 
 namespace SocketMessagingClient
 {
@@ -38,7 +39,7 @@ namespace SocketMessagingClient
                 _channels = obj;
             }
             Invalidate();
-            Refresh();
+            
         }
 
         private void RemoveButtons()
@@ -58,11 +59,11 @@ namespace SocketMessagingClient
                 Button button = new Button();
                 button.Text = channel.Name;
                 button.Name = channel.Name;
-                buttons.Add(button);
                 button.Location = new Point(50,c+10);
                 button.Visible = true;
                 button.Size = new Size(100,50);
                 this.Controls.Add(button);
+                buttons.Add(button);
                 c +=50;
             }
         }
