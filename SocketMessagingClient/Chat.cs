@@ -39,7 +39,6 @@ namespace SocketMessagingClient
                 _channels = obj;
             }
             Invalidate();
-            
         }
 
         private void RemoveButtons()
@@ -58,6 +57,7 @@ namespace SocketMessagingClient
             {
                 Button button = new Button();
                 button.Text = channel.Name;
+                button.ForeColor = Color.White;
                 button.Name = channel.Name;
                 button.Location = new Point(50,c+10);
                 button.Visible = true;
