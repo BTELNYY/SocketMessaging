@@ -5,6 +5,7 @@ using System.Data;
 using System.Drawing;
 using System.Linq;
 using System.Net.Http.Headers;
+using System.Runtime.Remoting.Channels;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -21,6 +22,7 @@ namespace SocketMessagingClient
 
         private void Chat_Load(object sender, EventArgs e)
         {
+      
         }
 
         private void label1_Click(object sender, EventArgs e)
@@ -62,7 +64,6 @@ namespace SocketMessagingClient
             this.Hide();
             SignUp signUp = new SignUp();
             signUp.ShowDialog();
-            
         }
     }
 }

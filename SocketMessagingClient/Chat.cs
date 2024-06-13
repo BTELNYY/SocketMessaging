@@ -63,10 +63,8 @@ namespace SocketMessagingClient
                 button.Visible = true;
                 button.Size = new Size(100,50);
                 this.Controls.Add(button);
-                c+=50;
+                c +=50;
             }
-            Invalidate();
-            Refresh();
         }
 
         private void button1_Click(object sender, EventArgs e)
