@@ -71,13 +71,13 @@ namespace SocketMessagingClient
         {
             if (textBox1.Text != string.Empty && textBox2.Text != string.Empty && textBox3.Text != string.Empty && textBox4.Text != string.Empty && textBox5.Text != string.Empty && textBox6.Text != string.Empty)
             {
-                Program.MyClinet.Connect(textBox1.Text + "." + textBox4.Text + "." + textBox5.Text + "." + textBox6.Text, int.Parse(textBox3.Text), textBox2.Text);
+                Program.MyClient.Connect(textBox1.Text + "." + textBox4.Text + "." + textBox5.Text + "." + textBox6.Text, int.Parse(textBox3.Text), textBox2.Text);
                 this.Hide();
             }
         }
         private void Login_Load(object sender, EventArgs e)
         {
-            bool connected = Program.MyClinet.Connect("127.0.0.1", 7777, "");
+            bool connected = Program.MyClient.Connect("127.0.0.1", 7777, "");
             if (connected)
             {
                 tryConnect();

@@ -23,7 +23,7 @@ namespace SocketMessagingClient
         {
             if (usernametextbox.Text != string.Empty && passwordtextbox.Text == passwordtextbox2.Text)
             {
-                    bool AccCreated = Program.MyClinet.ClientCreateAccount(usernametextbox.Text, passwordtextbox.Text);
+                    bool AccCreated = Program.MyClient.ClientCreateAccount(usernametextbox.Text, passwordtextbox.Text);
                     if (!AccCreated)
                     {
                         label1.Visible = false;

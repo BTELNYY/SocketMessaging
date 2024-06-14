@@ -125,9 +125,9 @@ namespace SocketMessagingShared
                     return false;
                 }
             }
+            Ready = true;
             Log.GlobalInfo($"User '{data.Username}' logged in with ClientID {ClientID}");
             User.ServerSetUsername(data.Username);
-            Ready = true;
             return true;
         }
 
