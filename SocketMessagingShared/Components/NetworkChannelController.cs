@@ -221,11 +221,19 @@ namespace SocketMessagingShared.Components
             {
                 Log.GlobalWarning("failed to find channel with GUID: " + target.GUID + "\n Client and server are out of sync, some messages have been lost.");
                 _channels.OverwriteContained(ClientGetChannels());
+                ClientReceiveChannels?.Invoke(_channels.ToList());
                 return;
             }
             int index = _channels.IndexOf(localTarget);
+            if(index == -1)
+            {
+                Log.GlobalWarning("Failed to find channel!");
+                _channels.OverwriteContained(ClientGetChannels());
+                ClientReceiveChannels?.Invoke(_channels.ToList());
+                return;
+            }
             _channels[index].NetworkMessages.Add(message);
-            MessegeRecieved?.Invoke(target, message);
+            MessegeRecieved?.Invoke(localTarget, message);
         }
 
         public List<NetworkChannel> ClientGetChannels()

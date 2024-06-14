@@ -11,6 +11,7 @@ using System.Windows.Forms;
 using SocketMessagingShared;
 using SocketNetworking;
 using System.Runtime.Remoting.Channels;
+using System.Diagnostics;
 
 namespace SocketMessagingClient
 {
@@ -46,9 +47,13 @@ namespace SocketMessagingClient
         {
             foreach (Button button in buttons) 
             {
+                button.Click -= Button_Click;
                 button.Controls.Remove(button);
+                _buttonsToChannels.Remove(button);
             }
         }
+
+        Dictionary<Button, NetworkChannel> _buttonsToChannels = new Dictionary<Button, NetworkChannel>();
 
         private void ChannelDisplays()
         {
@@ -63,10 +68,17 @@ namespace SocketMessagingClient
                 button.Location = new Point(0,c);
                 button.Visible = true;
                 button.Size = new Size(250,30);
+                button.Click += Button_Click;
                 this.Controls.Add(button);
                 buttons.Add(button);
                 c +=30;
+                _buttonsToChannels.Add(button, channel);
             }
+        }
+
+        private void Button_Click(object sender, EventArgs e)
+        {
+            Button pressed = sender as Button;
         }
 
         private void button1_Click(object sender, EventArgs e)
