@@ -13,7 +13,7 @@ namespace SocketMessagingClient
 {
     internal static class Program
     {
-        public static MessagingClient MyClinet;
+        public static MessagingClient MyClient;
 
         [DllImport("kernel32.dll", SetLastError = true)]
         [return: MarshalAs(UnmanagedType.Bool)]
@@ -29,9 +29,9 @@ namespace SocketMessagingClient
             Application.SetCompatibleTextRenderingDefault(false);
             AllocConsole();
             Log.OnLog += HandleNetworkLog;
-            MyClinet = new MessagingClient();
-            MyClinet.InitLocalClient();
-            MyClinet.ConnectionStateUpdated += HandleLogin;
+            MyClient = new MessagingClient();
+            MyClient.InitLocalClient();
+            MyClient.ConnectionStateUpdated += HandleLogin;
             Application.Run(new Connection());
             NetworkClient.ClientCreated += ClientCreated;
         }

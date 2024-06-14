@@ -44,7 +44,7 @@ namespace SocketMessagingClient
         {
             if (usernametextbox.Text != string.Empty && passwordtextbox.Text != string.Empty)
             {
-                bool LoginSucces = Program.MyClinet.ClientLogin(usernametextbox.Text, passwordtextbox.Text);
+                bool LoginSucces = Program.MyClient.ClientLogin(usernametextbox.Text, passwordtextbox.Text);
                 if (LoginSucces)
                 {
                     this.Hide();

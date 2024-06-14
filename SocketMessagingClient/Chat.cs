@@ -21,11 +21,12 @@ namespace SocketMessagingClient
         public Chat()
         {
             InitializeComponent();
+            _channels = Program.MyClient.ClientChannelController.Channels;
         }
 
         private void Chat_Load(object sender, EventArgs e)
         {
-            Program.MyClinet.ClientChannelController.ClientReceiveChannels += ClientChannelController_ClientReceiveChannels;
+            Program.MyClient.ClientChannelController.ClientReceiveChannels += ClientChannelController_ClientReceiveChannels;
         }
 
         private object _lock = new object();
@@ -87,7 +88,6 @@ namespace SocketMessagingClient
         {
             lock (_lock)
             {
-                Log.GlobalDebug("Redraw!");
                 RemoveButtons();
                 ChannelDisplays();
             }
