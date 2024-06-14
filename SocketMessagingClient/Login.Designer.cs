@@ -101,7 +101,7 @@
             this.passwordtextbox.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.passwordtextbox.Location = new System.Drawing.Point(108, 138);
             this.passwordtextbox.Name = "passwordtextbox";
-            this.passwordtextbox.PasswordChar = '*';
+            this.passwordtextbox.PasswordChar = '♡';
             this.passwordtextbox.Size = new System.Drawing.Size(172, 22);
             this.passwordtextbox.TabIndex = 5;
             // 
@@ -168,6 +168,7 @@
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Login";
             this.Load += new System.EventHandler(this.Chat_Load);
+            this.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.Login_KeyPress);
             this.ResumeLayout(false);
             this.PerformLayout();
 

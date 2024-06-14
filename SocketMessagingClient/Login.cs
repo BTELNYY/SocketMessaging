@@ -42,6 +42,20 @@ namespace SocketMessagingClient
 
         private void button2_Click(object sender, EventArgs e)
         {
+            loginl();
+            
+        }
+
+        private void Login_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            if (e.KeyChar == ((char)Keys.Enter))
+            {
+                loginl();
+            }
+        }
+
+        private void loginl()
+        {
             if (usernametextbox.Text != string.Empty && passwordtextbox.Text != string.Empty)
             {
                 bool LoginSucces = Program.MyClinet.ClientLogin(usernametextbox.Text, passwordtextbox.Text);
@@ -65,5 +79,7 @@ namespace SocketMessagingClient
             SignUp signUp = new SignUp();
             signUp.ShowDialog();
         }
+
+        
     }
 }
