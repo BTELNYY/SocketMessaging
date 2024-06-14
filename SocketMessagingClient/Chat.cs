@@ -60,12 +60,12 @@ namespace SocketMessagingClient
                 button.Text = channel.Name;
                 button.ForeColor = Color.White;
                 button.Name = channel.Name;
-                button.Location = new Point(50,c+10);
+                button.Location = new Point(0,c);
                 button.Visible = true;
-                button.Size = new Size(100,50);
+                button.Size = new Size(250,30);
                 this.Controls.Add(button);
                 buttons.Add(button);
-                c +=50;
+                c +=30;
             }
         }
 
