@@ -94,6 +94,7 @@
             this.usernametextbox.Name = "usernametextbox";
             this.usernametextbox.Size = new System.Drawing.Size(172, 22);
             this.usernametextbox.TabIndex = 4;
+            this.usernametextbox.KeyDown += new System.Windows.Forms.KeyEventHandler(this.usernametextbox_KeyDown);
             // 
             // passwordtextbox
             // 
@@ -104,6 +105,7 @@
             this.passwordtextbox.PasswordChar = '♡';
             this.passwordtextbox.Size = new System.Drawing.Size(172, 22);
             this.passwordtextbox.TabIndex = 5;
+            this.passwordtextbox.KeyDown += new System.Windows.Forms.KeyEventHandler(this.passwordtextbox_KeyDown);
             // 
             // button2
             // 
@@ -168,7 +170,6 @@
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Login";
             this.Load += new System.EventHandler(this.Chat_Load);
-            this.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.Login_KeyPress);
             this.ResumeLayout(false);
             this.PerformLayout();
 

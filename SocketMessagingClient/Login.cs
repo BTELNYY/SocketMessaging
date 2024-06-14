@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
+using System.Diagnostics;
 using System.Drawing;
 using System.Linq;
 using System.Net.Http.Headers;
@@ -22,7 +23,18 @@ namespace SocketMessagingClient
 
         private void Chat_Load(object sender, EventArgs e)
         {
+            debuger();
+        }
 
+        private void debuger()
+        {
+            bool LoginSucces = Program.MyClient.ClientLogin("user", "pass");
+            if (LoginSucces)
+            {
+                this.Close();
+                Chat chat = new Chat();
+                chat.ShowDialog();
+            };
         }
 
         private void label1_Click(object sender, EventArgs e)
@@ -46,13 +58,19 @@ namespace SocketMessagingClient
             
         }
 
-        private void Login_KeyPress(object sender, KeyPressEventArgs e)
+
+        private void passwordtextbox_KeyDown(object sender, KeyEventArgs e)
         {
-            if (e.KeyChar == ((char)Keys.Enter))
-            {
+            if(e.KeyCode == Keys.Return)
                 loginl();
-            }
         }
+
+        private void usernametextbox_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Return)
+                loginl();
+        }
+
 
         private void loginl()
         {
