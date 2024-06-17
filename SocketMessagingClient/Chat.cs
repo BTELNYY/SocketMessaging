@@ -19,6 +19,21 @@ namespace SocketMessagingClient
     {
         List<Button> buttons = new List<Button>();
 
+        string selectedChannelUUID = "";
+
+        int SelectedChannelIndex
+        {
+            get
+            {
+                NetworkChannel channel = _channels.Where(x => x.UUID == selectedChannelUUID).FirstOrDefault();
+                if(channel == default(NetworkChannel))
+                {
+                    return -1;
+                }
+                return _channels.IndexOf(channel);
+            }
+        }
+
         public Chat()
         {
             InitializeComponent();
@@ -48,6 +63,7 @@ namespace SocketMessagingClient
             foreach (Button button in buttons) 
             {
                 button.Click -= Button_Click;
+                button.MouseClick -= Button_Click;
                 button.Controls.Remove(button);
                 _buttonsToChannels.Remove(button);
             }
@@ -55,7 +71,7 @@ namespace SocketMessagingClient
 
         Dictionary<Button, NetworkChannel> _buttonsToChannels = new Dictionary<Button, NetworkChannel>();
 
-        private void ChannelDisplays()
+        private void ShowButtons()
         {
             int c = 0;
             List<NetworkChannel> channels = _channels;
@@ -69,6 +85,7 @@ namespace SocketMessagingClient
                 button.Visible = true;
                 button.Size = new Size(250,30);
                 button.Click += Button_Click;
+                button.MouseClick += Button_Click;
                 this.Controls.Add(button);
                 buttons.Add(button);
                 c +=30;
@@ -79,6 +96,9 @@ namespace SocketMessagingClient
         private void Button_Click(object sender, EventArgs e)
         {
             Button pressed = sender as Button;
+            NetworkChannel network = _buttonsToChannels[pressed];
+            selectedChannelUUID = network.UUID;
+            Log.GlobalDebug("Selected Channel UUID: " + selectedChannelUUID);
         }
 
         private void button1_Click(object sender, EventArgs e)
@@ -100,8 +120,26 @@ namespace SocketMessagingClient
         {
             lock (_lock)
             {
+                if (_channels.Count == 0)
+                {
+                    this.writetextbox.Hide();
+                    this.button1.Hide();
+                }
+                else
+                {
+                    this.writetextbox.Show();
+                    this.button1.Show();
+                }
+                if(SelectedChannelIndex == -1)
+                {
+                    this.NoChannelsLabel.Show();
+                }
+                else
+                {
+                    this.NoChannelsLabel.Hide();
+                }
                 RemoveButtons();
-                ChannelDisplays();
+                ShowButtons();
             }
         }
 

@@ -29,13 +29,18 @@ namespace SocketMessagingServer
             MessagingServer.PrepareServer();
             foreach (string dir in Directory.GetDirectories(DataManager.ChannelDataDirectory))
             {
-                string guid = dir.Split(',').Last().Trim('\\');
+                string guid = dir.Split('/').Last().Trim('/');
                 ChannelData data = new ChannelData();
                 data.PermanentID = guid;
                 ChannelData actualData = DataManager.GetConfigItem(data);
+                if(actualData == null)
+                {
+                    Log.GlobalError("Failed to load Channel! UUID: " + guid);
+                    continue;
+                }
                 NetworkChannel netChannel = new NetworkChannel();
-                netChannel.GUID = guid;
-                netChannel.Name = data.ChannelName;
+                netChannel.UUID = guid;
+                netChannel.Name = actualData.ChannelName;
                 netChannel.Description = actualData.Description;
                 foreach (NetworkMessage message in actualData.DiskChunks.Last().Messages)
                 {
@@ -67,7 +72,12 @@ namespace SocketMessagingServer
                         NetworkChannel channel = new NetworkChannel();
                         channel.Name = name;
                         channel.Description = description;
-                        channel.GUID = Guid.NewGuid().ToString();
+                        channel.UUID = Guid.NewGuid().ToString();
+                        ChannelData data = new ChannelData();
+                        data.ChannelName = name;
+                        data.Description = description;
+                        data.PermanentID = channel.UUID;
+                        DataManager.WriteConfigFile(data);
                         MessagingServer.NetworkChannelController.ServerAddNetworkChannel(channel);
                         Console.WriteLine("Done!");
                         break;

@@ -95,7 +95,8 @@ namespace SocketMessagingServer.ServerData
             string filePath = Path.Combine(item.Directory, item.Filename);
             if (File.Exists(filePath))
             {
-                T thing = JsonConvert.DeserializeObject<T>(filePath);
+                string data = File.ReadAllText(filePath);
+                T thing = JsonConvert.DeserializeObject<T>(data);
                 return thing;
             }
             else
@@ -112,7 +113,8 @@ namespace SocketMessagingServer.ServerData
             }
             if (File.Exists(path))
             {
-                T thing = JsonConvert.DeserializeObject<T>(path);
+                string data = File.ReadAllText(path);
+                T thing = JsonConvert.DeserializeObject<T>(data);
                 return thing;
             }
             else
@@ -236,7 +238,7 @@ namespace SocketMessagingServer.ServerData
                 data.PermanentID = permId;
                 ChannelData actualData = GetConfigItem(data);
                 NetworkChannel netChannel = new NetworkChannel();
-                netChannel.GUID = permId;
+                netChannel.UUID = permId;
                 netChannel.Description = actualData.Description;
                 netChannel.Name = actualData.ChannelName;
                 Channels.Add(netChannel);

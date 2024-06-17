@@ -216,10 +216,10 @@ namespace SocketMessagingShared.Components
         [NetworkInvocable(PacketDirection.Server)]
         private void ClientGetMessageUpdate(NetworkChannel target, NetworkMessage message)
         {
-            NetworkChannel localTarget = _channels.Where(x => x.GUID == target.GUID).FirstOrDefault();
+            NetworkChannel localTarget = _channels.Where(x => x.UUID == target.UUID).FirstOrDefault();
             if(localTarget == null)
             {
-                Log.GlobalWarning("failed to find channel with GUID: " + target.GUID + "\n Client and server are out of sync, some messages have been lost.");
+                Log.GlobalWarning("failed to find channel with GUID: " + target.UUID + "\n Client and server are out of sync, some messages have been lost.");
                 _channels.OverwriteContained(ClientGetChannels());
                 ClientReceiveChannels?.Invoke(_channels.ToList());
                 return;
@@ -279,7 +279,7 @@ namespace SocketMessagingShared.Components
             NetworkChannel channel = new NetworkChannel();
             channel.Name = name;
             channel.Description = description;
-            channel.GUID = Guid.NewGuid().ToString();
+            channel.UUID = Guid.NewGuid().ToString();
             ServerAddNetworkChannel(channel);
             return channel;
         }

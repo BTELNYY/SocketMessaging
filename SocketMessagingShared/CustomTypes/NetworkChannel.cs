@@ -14,7 +14,7 @@ namespace SocketMessagingShared.CustomTypes
 
         public string Description { get; set; } = string.Empty;
 
-        public string GUID { get; set; } = string.Empty;
+        public string UUID { get; set; } = string.Empty;
 
         public List<NetworkMessage> NetworkMessages { get; set; } = new List<NetworkMessage>();
 
@@ -23,7 +23,7 @@ namespace SocketMessagingShared.CustomTypes
             ByteReader reader = new ByteReader(data);
             Name = reader.ReadString();
             Description = reader.ReadString();
-            GUID = reader.ReadString();
+            UUID = reader.ReadString();
             NetworkMessages = reader.Read<SerializableList<NetworkMessage>>().ToList();
             return reader.ReadBytes;
         }
@@ -38,7 +38,7 @@ namespace SocketMessagingShared.CustomTypes
             ByteWriter writer = new ByteWriter();
             writer.WriteString(Name);
             writer.WriteString(Description);
-            writer.WriteString(GUID);
+            writer.WriteString(UUID);
             SerializableList<NetworkMessage> messages = new SerializableList<NetworkMessage>();
             messages.OverwriteContained(messages);
             writer.Write<SerializableList<NetworkMessage>>(messages);

@@ -31,6 +31,7 @@
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Chat));
             this.writetextbox = new System.Windows.Forms.TextBox();
             this.button1 = new System.Windows.Forms.Button();
+            this.NoChannelsLabel = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // writetextbox
@@ -59,12 +60,24 @@
             this.button1.Text = "➤";
             this.button1.UseVisualStyleBackColor = false;
             // 
+            // NoChannelsLabel
+            // 
+            this.NoChannelsLabel.AutoSize = true;
+            this.NoChannelsLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 21.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.NoChannelsLabel.ForeColor = System.Drawing.SystemColors.Control;
+            this.NoChannelsLabel.Location = new System.Drawing.Point(428, 250);
+            this.NoChannelsLabel.Name = "NoChannelsLabel";
+            this.NoChannelsLabel.Size = new System.Drawing.Size(632, 33);
+            this.NoChannelsLabel.TabIndex = 3;
+            this.NoChannelsLabel.Text = "You have selected no channel, nothing to show.";
+            // 
             // Chat
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(39)))), ((int)(((byte)(40)))), ((int)(((byte)(41)))));
             this.ClientSize = new System.Drawing.Size(1264, 681);
+            this.Controls.Add(this.NoChannelsLabel);
             this.Controls.Add(this.button1);
             this.Controls.Add(this.writetextbox);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
@@ -83,5 +96,6 @@
 
         private System.Windows.Forms.TextBox writetextbox;
         private System.Windows.Forms.Button button1;
+        private System.Windows.Forms.Label NoChannelsLabel;
     }
 }

@@ -23,10 +23,12 @@ namespace SocketMessagingClient
 
         private void Chat_Load(object sender, EventArgs e)
         {
-            debuger();
+#if DEBUG
+            Debugger();
+#endif
         }
 
-        private void debuger()
+        private void Debugger()
         {
             bool LoginSucces = Program.MyClient.ClientLogin("user", "pass");
             if (LoginSucces)
