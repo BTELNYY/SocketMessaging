@@ -19,13 +19,13 @@ namespace SocketMessagingClient
     {
         List<Button> buttons = new List<Button>();
 
-        string selectedChannelUUID = "";
+        string _selectedChannelUUID = "";
 
         int SelectedChannelIndex
         {
             get
             {
-                NetworkChannel channel = _channels.Where(x => x.UUID == selectedChannelUUID).FirstOrDefault();
+                NetworkChannel channel = _channels.Where(x => x.UUID == _selectedChannelUUID).FirstOrDefault();
                 if(channel == default(NetworkChannel))
                 {
                     return -1;
@@ -63,14 +63,16 @@ namespace SocketMessagingClient
         {
             foreach (Button button in buttons) 
             {
-                button.Click -= Button_Click;
-                button.MouseClick -= Button_Click;
                 button.Controls.Remove(button);
-                _buttonsToChannels.Remove(button);
+                if(button.Tag == null)
+                {
+                    continue;
+                }
+                _buttonsToChannels.Remove(button.Name);
             }
         }
 
-        Dictionary<Button, NetworkChannel> _buttonsToChannels = new Dictionary<Button, NetworkChannel>();
+        Dictionary<string, NetworkChannel> _buttonsToChannels = new Dictionary<string, NetworkChannel>();
 
         private void ShowButtons()
         {
@@ -86,26 +88,22 @@ namespace SocketMessagingClient
                 button.Visible = true;
                 button.Size = new Size(250,30);
                 button.Click += Button_Click;
-                button.MouseClick += Button_Click;
+                button.Name = channel.UUID;
                 this.Controls.Add(button);
                 buttons.Add(button);
                 c +=30;
-                _buttonsToChannels.Add(button, channel);
+                _buttonsToChannels.Add(channel.UUID, channel);
             }
         }
 
         private void Button_Click(object sender, EventArgs e)
         {
             Button pressed = sender as Button;
-            
-            if (pressed != null)
-            {
-                NoChannelsLabel.Visible = false;
-                NetworkChannel channel = _buttonsToChannels[pressed];
-                DisplayPreviousMessage(channel);
-            }
+            NetworkChannel channel = _buttonsToChannels[pressed.Name];
+            _selectedChannelUUID = channel.UUID;
+            DisplayPreviousMessage(channel);
         }
-
+        
         private void DisplayPreviousMessage(NetworkChannel channel)
         {
         
@@ -135,27 +133,21 @@ namespace SocketMessagingClient
         {
             lock (_lock)
             {
-                if (_channels.Count == 0)
+                if(SelectedChannelIndex == -1)
                 {
+                    this.NoChannelsLabel.Show();
                     this.writetextbox.Hide();
                     this.button1.Hide();
                 }
                 else
                 {
+                    this.NoChannelsLabel.Hide();
                     this.writetextbox.Show();
                     this.button1.Show();
                 }
-                if(SelectedChannelIndex == -1)
-                {
-                    this.NoChannelsLabel.Show();
-                }
-                else
-                {
-                    this.NoChannelsLabel.Hide();
-                }
                 RemoveButtons();
+                _buttonsToChannels.Clear();
                 ShowButtons();
-                if(s)
             }
         }
 
