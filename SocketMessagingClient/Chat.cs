@@ -19,21 +19,6 @@ namespace SocketMessagingClient
     {
         List<Button> buttons = new List<Button>();
 
-        string selectedChannelUUID = "";
-
-        int SelectedChannelIndex
-        {
-            get
-            {
-                NetworkChannel channel = _channels.Where(x => x.UUID == selectedChannelUUID).FirstOrDefault();
-                if(channel == default(NetworkChannel))
-                {
-                    return -1;
-                }
-                return _channels.IndexOf(channel);
-            }
-        }
-
         public Chat()
         {
             InitializeComponent();
@@ -43,7 +28,6 @@ namespace SocketMessagingClient
         private void Chat_Load(object sender, EventArgs e)
         {
             Program.MyClient.ClientChannelController.ClientReceiveChannels += ClientChannelController_ClientReceiveChannels;
-            Program.MyClient.ClientChannelController.MessegeRecieved += ClientChannelController_MessegeRecieved;
         }
 
         private object _lock = new object();
@@ -64,7 +48,6 @@ namespace SocketMessagingClient
             foreach (Button button in buttons) 
             {
                 button.Click -= Button_Click;
-                button.MouseClick -= Button_Click;
                 button.Controls.Remove(button);
                 _buttonsToChannels.Remove(button);
             }
@@ -72,7 +55,7 @@ namespace SocketMessagingClient
 
         Dictionary<Button, NetworkChannel> _buttonsToChannels = new Dictionary<Button, NetworkChannel>();
 
-        private void ShowButtons()
+        private void ChannelDisplays()
         {
             int c = 0;
             List<NetworkChannel> channels = _channels;
@@ -86,7 +69,6 @@ namespace SocketMessagingClient
                 button.Visible = true;
                 button.Size = new Size(250,30);
                 button.Click += Button_Click;
-                button.MouseClick += Button_Click;
                 this.Controls.Add(button);
                 buttons.Add(button);
                 c +=30;
@@ -97,23 +79,6 @@ namespace SocketMessagingClient
         private void Button_Click(object sender, EventArgs e)
         {
             Button pressed = sender as Button;
-            
-            if (pressed != null)
-            {
-                NoChannelsLabel.Visible = false;
-                NetworkChannel channel = _buttonsToChannels[pressed];
-                DisplayPreviousMessage(channel);
-            }
-        }
-
-        private void DisplayPreviousMessage(NetworkChannel channel)
-        {
-        
-        }
-
-        private void ClientChannelController_MessegeRecieved(NetworkChannel arg1, NetworkMessage arg2)
-        {
-            Invalidate();
         }
 
         private void button1_Click(object sender, EventArgs e)
@@ -135,38 +100,9 @@ namespace SocketMessagingClient
         {
             lock (_lock)
             {
-                if (_channels.Count == 0)
-                {
-                    this.writetextbox.Hide();
-                    this.button1.Hide();
-                }
-                else
-                {
-                    this.writetextbox.Show();
-                    this.button1.Show();
-                }
-                if(SelectedChannelIndex == -1)
-                {
-                    this.NoChannelsLabel.Show();
-                }
-                else
-                {
-                    this.NoChannelsLabel.Hide();
-                }
                 RemoveButtons();
-                ShowButtons();
-                if(s)
+                ChannelDisplays();
             }
-        }
-
-        private void textBox1_TextChanged(object sender, EventArgs e)
-        {
-            
-        }
-
-        private void textBox1_KeyDown(object sender, KeyEventArgs e)
-        {
-            if (e.KeyCode == Keys.Return) { writetextbox.Text = string.Empty; }
         }
     }
 }
