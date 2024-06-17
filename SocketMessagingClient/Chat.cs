@@ -43,6 +43,7 @@ namespace SocketMessagingClient
         private void Chat_Load(object sender, EventArgs e)
         {
             Program.MyClient.ClientChannelController.ClientReceiveChannels += ClientChannelController_ClientReceiveChannels;
+            Program.MyClient.ClientChannelController.MessegeRecieved += ClientChannelController_MessegeRecieved;
         }
 
         private object _lock = new object();
@@ -96,9 +97,23 @@ namespace SocketMessagingClient
         private void Button_Click(object sender, EventArgs e)
         {
             Button pressed = sender as Button;
-            NetworkChannel network = _buttonsToChannels[pressed];
-            selectedChannelUUID = network.UUID;
-            Log.GlobalDebug("Selected Channel UUID: " + selectedChannelUUID);
+            
+            if (pressed != null)
+            {
+                NoChannelsLabel.Visible = false;
+                NetworkChannel channel = _buttonsToChannels[pressed];
+                DisplayPreviousMessage(channel);
+            }
+        }
+
+        private void DisplayPreviousMessage(NetworkChannel channel)
+        {
+        
+        }
+
+        private void ClientChannelController_MessegeRecieved(NetworkChannel arg1, NetworkMessage arg2)
+        {
+            Invalidate();
         }
 
         private void button1_Click(object sender, EventArgs e)
@@ -140,6 +155,7 @@ namespace SocketMessagingClient
                 }
                 RemoveButtons();
                 ShowButtons();
+                if(s)
             }
         }
 
