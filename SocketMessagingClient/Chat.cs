@@ -69,6 +69,7 @@ namespace SocketMessagingClient
                 button.Visible = true;
                 button.Size = new Size(250,30);
                 button.Click += Button_Click;
+                button.MouseClick += Button_Click;
                 this.Controls.Add(button);
                 buttons.Add(button);
                 c +=30;
@@ -79,6 +80,7 @@ namespace SocketMessagingClient
         private void Button_Click(object sender, EventArgs e)
         {
             Button pressed = sender as Button;
+            
         }
 
         private void button1_Click(object sender, EventArgs e)
