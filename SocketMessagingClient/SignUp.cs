@@ -21,7 +21,7 @@ namespace SocketMessagingClient
 
         private void button2_Click(object sender, EventArgs e)
         {
-            if (usernametextbox.Text != string.Empty && passwordtextbox.Text == passwordtextbox2.Text)
+            if (usernametextbox.Text != string.Empty && passwordtextbox.Text == passwordtextboxcheck.Text)
             {
                     bool AccCreated = Program.MyClient.ClientCreateAccount(usernametextbox.Text, passwordtextbox.Text);
                     if (!AccCreated)
@@ -34,7 +34,7 @@ namespace SocketMessagingClient
                         LoginSwitcher();
                     }
             }
-            else if (passwordtextbox.Text != passwordtextbox2.Text)
+            else if (passwordtextbox.Text != passwordtextboxcheck.Text)
             {
                 label1.Visible = false;
                 label2.Text = "Password doesn't match";
@@ -63,5 +63,7 @@ namespace SocketMessagingClient
         {
             
         }
+
+        
     }
 }

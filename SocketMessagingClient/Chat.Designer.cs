@@ -32,6 +32,7 @@
             this.writetextbox = new System.Windows.Forms.TextBox();
             this.button1 = new System.Windows.Forms.Button();
             this.NoChannelsLabel = new System.Windows.Forms.Label();
+            this.panel1 = new System.Windows.Forms.Panel();
             this.SuspendLayout();
             // 
             // writetextbox
@@ -71,6 +72,15 @@
             this.NoChannelsLabel.TabIndex = 3;
             this.NoChannelsLabel.Text = "You have selected no channel, nothing to show.";
             // 
+            // panel1
+            // 
+            this.panel1.AutoScroll = true;
+            this.panel1.Location = new System.Drawing.Point(314, 12);
+            this.panel1.Name = "panel1";
+            this.panel1.Size = new System.Drawing.Size(799, 573);
+            this.panel1.TabIndex = 4;
+            this.panel1.Paint += new System.Windows.Forms.PaintEventHandler(this.panel1_Paint_1);
+            // 
             // Chat
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -80,6 +90,7 @@
             this.Controls.Add(this.NoChannelsLabel);
             this.Controls.Add(this.button1);
             this.Controls.Add(this.writetextbox);
+            this.Controls.Add(this.panel1);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MaximizeBox = false;
             this.MinimizeBox = false;
@@ -97,5 +108,6 @@
         private System.Windows.Forms.TextBox writetextbox;
         private System.Windows.Forms.Button button1;
         private System.Windows.Forms.Label NoChannelsLabel;
+        private System.Windows.Forms.Panel panel1;
     }
 }

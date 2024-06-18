@@ -56,6 +56,7 @@ namespace SocketMessagingClient
             {
                 _channels = obj;
             }
+            Log.GlobalDebug("Got new channels, invalidating.");
             Invalidate();
         }
 
@@ -131,24 +132,22 @@ namespace SocketMessagingClient
 
         private void Chat_Paint(object sender, PaintEventArgs e)
         {
-            lock (_lock)
+            Log.GlobalDebug("Redraw");
+            if (SelectedChannelIndex == -1)
             {
-                if(SelectedChannelIndex == -1)
-                {
-                    this.NoChannelsLabel.Show();
-                    this.writetextbox.Hide();
-                    this.button1.Hide();
-                }
-                else
-                {
-                    this.NoChannelsLabel.Hide();
-                    this.writetextbox.Show();
-                    this.button1.Show();
-                }
-                RemoveButtons();
-                _buttonsToChannels.Clear();
-                ShowButtons();
+                this.NoChannelsLabel.Show();
+                this.writetextbox.Hide();
+                this.button1.Hide();
             }
+            else
+            {
+                this.NoChannelsLabel.Hide();
+                this.writetextbox.Show();
+                this.button1.Show();
+            }
+            RemoveButtons();
+            _buttonsToChannels.Clear();
+            ShowButtons();
         }
 
         private void textBox1_TextChanged(object sender, EventArgs e)
@@ -159,6 +158,11 @@ namespace SocketMessagingClient
         private void textBox1_KeyDown(object sender, KeyEventArgs e)
         {
             if (e.KeyCode == Keys.Return) { writetextbox.Text = string.Empty; }
+        }
+
+        private void panel1_Paint_1(object sender, PaintEventArgs e)
+        {
+
         }
     }
 }
