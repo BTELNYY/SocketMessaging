@@ -135,15 +135,19 @@ namespace SocketMessagingShared.Components
             ServerSyncChannels();
         }
 
-        public void ServerSyncChannels(NetworkClient target = null)
+        public void ServerSyncChannels(NetworkClient target = null, SerializableList<NetworkChannel> channels = null)
         {
             if (!NetworkServer.Active)
             {
                 return;
             }
+            if(channels == null)
+            {
+                channels = _channels;
+            }
             if(target == null)
             {
-                NetworkServer.NetworkInvokeOnAll(this, nameof(ClientGetChannelList), new object[] { _channels }, readyOnly: true);
+                NetworkServer.NetworkInvokeOnAll(this, nameof(ClientGetChannelList), new object[] { channels }, readyOnly: true);
             }
             else
             {
@@ -151,7 +155,7 @@ namespace SocketMessagingShared.Components
                 {
                     return;
                 }
-                target.NetworkInvoke(this, nameof(ClientGetChannelList), new object[] { _channels });
+                target.NetworkInvoke(this, nameof(ClientGetChannelList), new object[] { channels });
             }
         }
 

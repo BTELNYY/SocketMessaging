@@ -11,6 +11,7 @@ using System.Threading.Tasks;
 using SocketMessagingShared.CustomTypes;
 using System.Security;
 using System.Security.Permissions;
+using SocketNetworking.PacketSystem.TypeWrappers;
 
 namespace SocketMessagingShared
 {
@@ -40,7 +41,6 @@ namespace SocketMessagingShared
             {
                 if(NetworkManager.WhereAmI == ClientLocation.Remote)
                 {
-                    Log.GlobalWarning("tried to get client channel controller on the server!");
                     return MessagingServer.NetworkChannelController;
                 }
                 return _controller;
@@ -93,6 +93,11 @@ namespace SocketMessagingShared
             return NetworkInvoke<bool>(this, nameof(ServerPerformLoginCommand), new object[] { loginData });
         }
 
+        public void ClientLogout()
+        {
+            NetworkInvoke(this, nameof(ServerPreformLogout), new object[] { });
+        }
+
         public bool ClientCreateAccount(string username, string password)
         {
             LoginData loginData = new LoginData();
@@ -109,6 +114,18 @@ namespace SocketMessagingShared
         public void ServerNotifyClientRemoved(NetworkUser user)
         {
             NetworkInvoke(nameof(ClientRemovedRpc), new object[] { user.NetworkID });
+        }
+
+        public void ServerLogout(NetworkClient client)
+        {
+            MessagingServer.NetworkChannelController.ServerSyncChannels(client, new SerializableList<NetworkChannel>());
+            client.Ready = false;
+        }
+
+        [NetworkInvocable(PacketDirection.Client)]
+        private void ServerPreformLogout(NetworkClient client)
+        {
+            ServerLogout(client);
         }
 
         [NetworkInvocable(PacketDirection.Client)]
