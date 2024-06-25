@@ -91,6 +91,5 @@ namespace SocketMessagingClient
             signUp.ShowDialog();
         }
 
-        
     }
 }

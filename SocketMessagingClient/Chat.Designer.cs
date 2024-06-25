@@ -42,13 +42,12 @@
             this.MessageTextBox.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.MessageTextBox.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.MessageTextBox.ForeColor = System.Drawing.SystemColors.Window;
-            this.MessageTextBox.Location = new System.Drawing.Point(431, 591);
+            this.MessageTextBox.Location = new System.Drawing.Point(265, 591);
             this.MessageTextBox.Multiline = true;
             this.MessageTextBox.Name = "MessageTextBox";
-            this.MessageTextBox.Size = new System.Drawing.Size(610, 45);
+            this.MessageTextBox.Size = new System.Drawing.Size(776, 45);
             this.MessageTextBox.TabIndex = 0;
             this.MessageTextBox.TextChanged += new System.EventHandler(this.MessageTextBox_TextChanged);
-            this.MessageTextBox.KeyDown += new System.Windows.Forms.KeyEventHandler(this.MessageTextBox_KeyDown);
             // 
             // SendButton
             // 

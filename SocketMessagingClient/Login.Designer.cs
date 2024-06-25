@@ -50,7 +50,6 @@
             this.label1.Size = new System.Drawing.Size(62, 24);
             this.label1.TabIndex = 0;
             this.label1.Text = "Log In";
-
             // 
             // label2
             // 
@@ -73,7 +72,6 @@
             this.label3.Size = new System.Drawing.Size(63, 15);
             this.label3.TabIndex = 2;
             this.label3.Text = "username";
-
             // 
             // label4
             // 
@@ -133,7 +131,6 @@
             this.label5.Size = new System.Drawing.Size(101, 15);
             this.label5.TabIndex = 8;
             this.label5.Text = "forgot password?";
-
             // 
             // label6
             // 
