@@ -18,13 +18,12 @@ namespace SocketMessagingClient
         {
             InitializeComponent();
         }
-
+        //if sign up button clicked -> call signupcheck function
         private void button2_Click(object sender, EventArgs e)
         {
             signupcheck();
-            
         }
-
+        //signupcheck fucntion that get response from server if Account was created we switch the forms, otherwise show lable + data
         private void signupcheck()
         {
             if (usernametextbox.Text != string.Empty && passwordtextbox.Text == passwordtextboxcheck.Text)
@@ -50,7 +49,7 @@ namespace SocketMessagingClient
                 label1.Text = "Username is Incorrect";
             }
         }
-
+        //simple form switcher used for switching the form -_-
         private void LoginSwitcher()
         {
 
@@ -60,29 +59,29 @@ namespace SocketMessagingClient
             
         }
 
-
+        //if lable for login was cliked switch the form
         private void label6_Click(object sender, EventArgs e)
         {
             LoginSwitcher();
         }
-
+        //SignUp_Load event used for nothing now -_-
         private void SignUp_Load(object sender, EventArgs e)
         {
             
         }
-
+        //also createAccount just when enter on keyboard pressed event
         private void passwordtextboxcheck_KeyDown(object sender, KeyEventArgs e)
         {
             if (e.KeyCode == Keys.Return)
                 signupcheck();
         }
-
+        //also createAccount just when enter on keyboard pressed event
         private void passwordtextbox_KeyDown(object sender, KeyEventArgs e)
         {
             if (e.KeyCode == Keys.Return)
                 signupcheck();
         }
-
+        //also createAccount just when enter on keyboard pressed event
         private void usernametextbox_KeyDown(object sender, KeyEventArgs e)
         {
             if (e.KeyCode == Keys.Return)

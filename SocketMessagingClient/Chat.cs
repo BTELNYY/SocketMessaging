@@ -1,4 +1,6 @@
-﻿using SocketMessagingShared.CustomTypes;
+﻿// ALL THE COMMENTS ARE JUST NOT EVEN CLOSE, THERE MUCH MORE PROCESSES ON SERVER, ETC.
+// USED JUST TO APPROXIMATELY EXPLAIN WHAT IS GOING ON
+using SocketMessagingShared.CustomTypes;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -15,10 +17,11 @@ using System.Diagnostics;
 
 namespace SocketMessagingClient
 {
+    // list buttons used for list of buttns aka channels
     public partial class Chat : Form
     {
         List<Button> buttons = new List<Button>();
-
+        //string of UUID of selected channel (selected button)
         string _selectedChannelUUID = "";
 
         int SelectedChannelIndex

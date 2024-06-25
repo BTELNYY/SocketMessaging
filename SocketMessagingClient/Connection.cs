@@ -1,4 +1,6 @@
-﻿using System;
+﻿// ALL THE COMMENTS ARE JUST NOT EVEN CLOSE, THERE MUCH MORE PROCESSES ON SERVER, ETC.
+// USED JUST TO APPROXIMATELY EXPLAIN WHAT IS GOING ON
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -20,6 +22,7 @@ namespace SocketMessagingClient
             InitializeComponent();
         }
 
+        //some useless 2 borders made for fun
         private void panel1_Paint(object sender, PaintEventArgs e)
         {
             panel1.Location = new Point((ClientSize.Width - panel1.Size.Width)/2, ((ClientSize.Height - ClientSize.Height)/2)-3);
@@ -35,38 +38,8 @@ namespace SocketMessagingClient
                                                           panel1.ClientSize.Height - thickness));
             }
         }
-        private void textBox1_TextChanged(object sender, EventArgs e)
-        {
-            
-        }
 
-        private void label2_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void label1_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        
-
-        private void textBox3_KeyPress(object sender, KeyPressEventArgs e)
-        {
-        }
-
-        private void numericUpDown1_ValueChanged(object sender, EventArgs e)
-        {
-            
-        }
-
-        private void textBox4_TextChanged(object sender, EventArgs e)
-        {
-
-        }
-
-
+        //If button clicked verifying info and then Client Connect to the server
         private void button1_Click(object sender, EventArgs e)
         {
             if (textBox1.Text != string.Empty && textBox2.Text != string.Empty && textBox3.Text != string.Empty && textBox4.Text != string.Empty && textBox5.Text != string.Empty && textBox6.Text != string.Empty)
@@ -75,6 +48,8 @@ namespace SocketMessagingClient
                 this.Hide();
             }
         }
+
+        //at the start trying by default connect to the server and if so just call function that show other form
         private void Login_Load(object sender, EventArgs e)
         {
             bool connected = Program.MyClient.Connect("127.0.0.1", 7777, "");
@@ -84,6 +59,7 @@ namespace SocketMessagingClient
             }
         }
 
+        //function that swipes forms
         private void tryConnect()
         {
             
