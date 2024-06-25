@@ -47,7 +47,6 @@
             this.MessageTextBox.Name = "MessageTextBox";
             this.MessageTextBox.Size = new System.Drawing.Size(776, 45);
             this.MessageTextBox.TabIndex = 0;
-            this.MessageTextBox.TextChanged += new System.EventHandler(this.MessageTextBox_TextChanged);
             // 
             // SendButton
             // 
@@ -106,6 +105,7 @@
             this.Controls.Add(this.SendButton);
             this.Controls.Add(this.MessageTextBox);
             this.Controls.Add(this.ChatPanel);
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MaximizeBox = false;
             this.MinimizeBox = false;

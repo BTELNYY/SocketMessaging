@@ -242,11 +242,6 @@ namespace SocketMessagingClient
             }
         }
 
-        private void MessageTextBox_TextChanged(object sender, EventArgs e)
-        {
-            
-        }
-
         //when send message button was clicked call SendMessage with MessageTextBox.Text and set the MessageTextBox to empty
         private void SendButton_Click(object sender, EventArgs e)
         {
