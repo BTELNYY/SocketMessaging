@@ -43,6 +43,7 @@
             this.MessageTextBox.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.MessageTextBox.ForeColor = System.Drawing.SystemColors.Window;
             this.MessageTextBox.Location = new System.Drawing.Point(263, 606);
+            this.MessageTextBox.MaxLength = 140;
             this.MessageTextBox.Name = "MessageTextBox";
             this.MessageTextBox.Size = new System.Drawing.Size(776, 29);
             this.MessageTextBox.TabIndex = 0;

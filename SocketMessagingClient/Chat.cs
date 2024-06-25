@@ -229,7 +229,7 @@ namespace SocketMessagingClient
                 label.Text = message.ToString();
                 label.Location = new Point(265, yOffset);
                 label.Visible = true;
-                label.AutoSize = false;
+                label.AutoSize = true;
                 label.Size = new Size(780, 30 * Math.Max(1, sizeMultiplier));
                 label.ForeColor = Color.White;
                 label.Font = new Font(label.Font.FontFamily.Name, 15);
