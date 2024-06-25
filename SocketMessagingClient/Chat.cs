@@ -1,4 +1,6 @@
-﻿using SocketMessagingShared.CustomTypes;
+﻿// ALL THE COMMENTS ARE JUST NOT EVEN CLOSE, THERE MUCH MORE PROCESSES ON SERVER, ETC.
+// USED JUST TO APPROXIMATELY EXPLAIN WHAT IS GOING ON
+using SocketMessagingShared.CustomTypes;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -15,12 +17,13 @@ using System.Diagnostics;
 
 namespace SocketMessagingClient
 {
+    // list buttons used for list of buttns aka channels
     public partial class Chat : Form
     {
         List<Button> buttons = new List<Button>();
-
+        //string of UUID of selected channel (selected button)
         string _selectedChannelUUID = "";
-
+        //integer of id of selected channel
         int SelectedChannelIndex
         {
             get
@@ -33,7 +36,7 @@ namespace SocketMessagingClient
                 return _channels.IndexOf(channel);
             }
         }
-
+        // public class NetworkChannel CurrentChannel that return Selected Channel Index
         public NetworkChannel CurrentChannel
         {
             get
@@ -45,19 +48,20 @@ namespace SocketMessagingClient
                 return Program.MyClient.ClientChannelController.Channels[SelectedChannelIndex];
             }
         }
-
+        // public for Chat, at the start Initialize Components (all the stuff that take place at the form), then set for channls all the channel that exist at the start
         public Chat()
         {
             InitializeComponent();
             _channels = Program.MyClient.ClientChannelController.Channels;
         }
 
-
+        // now that doing nothing -_-
         private void DisplayPreviousMessage(NetworkChannel channel)
         {
 
         }
 
+        // sending the messages (veryfying data and then create new NetworkMessage message, set for it needed properties, and at the end send it)
         private void SendMessage(string text)
         {
             if(string.IsNullOrEmpty(text) || string.IsNullOrWhiteSpace(text))
@@ -75,7 +79,7 @@ namespace SocketMessagingClient
             message.AuthorUUID = Program.MyClient.UUID;
             Program.MyClient.ClientChannelController.ClientSendMessage(CurrentChannel, message);
         }
-
+        //when form loaded add event such as new channl or messages was received
         private void Chat_Load(object sender, EventArgs e)
         {
             Program.MyClient.ClientChannelController.ClientReceiveChannels += ClientChannelController_ClientReceiveChannels;
@@ -84,9 +88,10 @@ namespace SocketMessagingClient
         }
 
         private object _lock = new object();
-
+        // list of channels that are at the time
         private List<NetworkChannel> _channels = new List<NetworkChannel>();
 
+        //event on new channel was recieved from the server, if so add channel and validate it
         private void ClientChannelController_ClientReceiveChannels(List<NetworkChannel> obj)
         {
             lock(_lock)
@@ -96,7 +101,7 @@ namespace SocketMessagingClient
             ChannelPanel.Invalidate();
             Invalidate();
         }
-
+        //event on new messages was recieved, claryfying data and then validate it
         private void ClientChannelController_MessagesRecieved(NetworkChannel obj)
         {
             lock (_lock)
@@ -111,7 +116,7 @@ namespace SocketMessagingClient
             ChatPanel.Invalidate();
             Invalidate();
         }
-
+        //event on new message was recieved, claryfying data and then validate it
         private void ClientChannelController_MessegeRecieved(NetworkChannel arg1, NetworkMessage arg2)
         {
             lock (_lock)
@@ -126,7 +131,7 @@ namespace SocketMessagingClient
             ChatPanel.Invalidate();
             Invalidate();
         }
-
+        //remove button(channel) (redraw buttons each time when new channel where added)
         private void RemoveButtons()
         {
             foreach (Button button in buttons) 
@@ -141,7 +146,7 @@ namespace SocketMessagingClient
         }
 
         Dictionary<string, NetworkChannel> _buttonsToChannels = new Dictionary<string, NetworkChannel>();
-
+        //displaying the buttons (channels) in right order
         private void ShowButtons()
         {
             int c = 0;
@@ -163,7 +168,7 @@ namespace SocketMessagingClient
                 _buttonsToChannels.Add(channel.UUID, channel);
             }
         }
-
+        //event if button was clicked (in that case if any channel was selected)
         private void Button_Click(object sender, EventArgs e)
         {
             Button pressed = sender as Button;
@@ -177,7 +182,7 @@ namespace SocketMessagingClient
                 Invalidate();
             }
         }
-
+        //redraw of the channels and hide/show elements
         private void Chat_Paint(object sender, PaintEventArgs e)
         {
             Log.GlobalDebug("Redraw");
@@ -197,7 +202,7 @@ namespace SocketMessagingClient
             _buttonsToChannels.Clear();
             ShowButtons();
         }
-
+        //list of drawen messages
         List<NetworkMessage> _alreadyRenderedMessages = new List<NetworkMessage>();
 
         private void ChannelPanel_Paint(object sender, PaintEventArgs e)

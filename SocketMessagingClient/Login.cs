@@ -1,4 +1,6 @@
-﻿using System;
+﻿// ALL THE COMMENTS ARE JUST NOT EVEN CLOSE, THERE MUCH MORE PROCESSES ON SERVER, ETC.
+// USED JUST TO APPROXIMATELY EXPLAIN WHAT IS GOING ON
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -20,14 +22,14 @@ namespace SocketMessagingClient
         {
             InitializeComponent();
         }
-
+        // at the form load, then load debuger
         private void Chat_Load(object sender, EventArgs e)
         {
 #if DEBUG
             Debugger();
 #endif
         }
-
+        // debuger only for debugin fast testing used for fastLogin
         private void Debugger()
         {
             bool LoginSucces = Program.MyClient.ClientLogin("user", "pass");
@@ -39,41 +41,29 @@ namespace SocketMessagingClient
             };
         }
 
-        private void label1_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void label3_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void label5_Click(object sender, EventArgs e)
-        {
-
-        }
-
+        
+        //if click on login button -> login
         private void button2_Click(object sender, EventArgs e)
         {
             loginl();
             
         }
 
-
+        //exact same login just when we clicked enter on keyboard
         private void passwordtextbox_KeyDown(object sender, KeyEventArgs e)
         {
             if(e.KeyCode == Keys.Return)
                 loginl();
         }
 
+        //exact same login just when we clicked enter on keyboard
         private void usernametextbox_KeyDown(object sender, KeyEventArgs e)
         {
             if (e.KeyCode == Keys.Return)
                 loginl();
         }
 
-
+        // the fucntion that made login (verifying data in textboxes and then make the login if successful then swap the forms, otherwise show the unseccess label + data)
         private void loginl()
         {
             if (usernametextbox.Text != string.Empty && passwordtextbox.Text != string.Empty)
@@ -88,11 +78,12 @@ namespace SocketMessagingClient
                 else
                 {
                     label1.Visible = false;
-                    label2.Text = "Unsuccesful";
+                    label2.Text = "Unsuccessful";
                 }
             }
         }
 
+        // if sign up label was clicked, then swap to the sign up form
         private void label6_Click(object sender, EventArgs e)
         {
             this.Hide();
