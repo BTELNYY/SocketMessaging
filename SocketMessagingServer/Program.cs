@@ -96,6 +96,7 @@ namespace SocketMessagingServer
                     int lastChunk = actualData.LastChunk;
                     Log.GlobalDebug($"Last Chunk: {lastChunk}");
                     List<MessageChunkFile> chunks = actualData.DiskChunks;
+                    chunks.RemoveAt(0);
                     MessageChunkFile fileTarget = chunks[lastChunk];
                     int messagesToSave = channel.NetworkMessages.Count - lastKnownCount;
                     lastKnownCount = channel.NetworkMessages.Count;
