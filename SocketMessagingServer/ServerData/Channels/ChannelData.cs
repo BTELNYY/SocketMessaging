@@ -1,4 +1,5 @@
-﻿using SocketMessagingServer.ServerData.Messages;
+﻿using Newtonsoft.Json;
+using SocketMessagingServer.ServerData.Messages;
 using SocketMessagingServer.ServerData.Permissions;
 using System;
 using System.Collections.Generic;
@@ -21,8 +22,10 @@ namespace SocketMessagingServer.ServerData.Channels
             }
         }
 
+        [JsonIgnore]
         private List<MessageChunkFile> _messages = new List<MessageChunkFile>();
 
+        [JsonIgnore]
         public List<MessageChunkFile> DiskChunks
         {
             get
@@ -40,24 +43,47 @@ namespace SocketMessagingServer.ServerData.Channels
                 _messages = chunks;
                 return chunks;
             }
+            set
+            {
+                CachedChunks = value;
+                SaveChunks();
+            }
         }
 
+        [JsonIgnore]
         public List<MessageChunkFile> CachedChunks
         {
             get
             {
                 return _messages;
             }
+            set
+            {
+                _messages = value;
+                foreach(MessageChunkFile chunk in _messages)
+                {
+                    chunk.ChannelUUID = PermanentID;
+                }
+            }
         }
 
+        public void SaveChunks()
+        {
+            foreach(MessageChunkFile chunk in DiskChunks)
+            {
+                DataManager.WriteConfigFile(chunk, true);
+            }
+        }
 
-        public override string Filename => "meta" + ".json";
+        public override string Filename => "meta.json";
 
         public string PermanentID { get; set; } =  string.Empty;
 
         public string ChannelName { get; set; } = string.Empty; 
 
         public string Description { get; set; } = string.Empty;
+
+        public int LastChunk { get; set; } = 0;
 
         public Dictionary<string, PermissionData> GroupToPermissions { get; set; } = new Dictionary<string, PermissionData>();
     }

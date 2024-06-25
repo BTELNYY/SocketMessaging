@@ -7,6 +7,8 @@ using SocketMessagingShared.CustomTypes;
 using SocketNetworking;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
+using System.ComponentModel.Design;
 using System.IO;
 using System.Linq;
 using System.Security.Cryptography.X509Certificates;
@@ -56,7 +58,63 @@ namespace SocketMessagingServer
             }
             MessagingServer.StartServer();
             Thread console = new Thread(HandleConsole);
+            Thread messageSaving = new Thread(DoMessageSaving);
             console.Start();
+            messageSaving.Start();
+        }
+
+        static Dictionary<NetworkChannel, int> _channelToLastKnownIndex = new Dictionary<NetworkChannel, int>();
+
+        private static void DoMessageSaving()
+        {
+            //OH YES THE LOOP HELL
+            //Doesnt actually matter because we are in a seperate blocking thread.
+            while (true)
+            {
+                Thread.Sleep(10000);
+                List<NetworkChannel> channels = MessagingServer.NetworkChannelController.Channels;
+                Log.GlobalInfo("Saving channels. Channels Count: " + channels.Count);
+                foreach (NetworkChannel channel in channels)
+                {
+                    int lastKnownCount = 0;
+                    if (_channelToLastKnownIndex.ContainsKey(channel))
+                    {
+                        lastKnownCount = _channelToLastKnownIndex[channel];
+                    }
+                    else
+                    {
+                        _channelToLastKnownIndex.Add(channel, 0);
+                    }
+                    ChannelData data = new ChannelData();
+                    data.PermanentID = channel.UUID;
+                    ChannelData actualData = DataManager.GetConfigItem(data);
+                    int lastChunk = actualData.LastChunk;
+                    Log.GlobalDebug($"Last Chunk: {lastChunk}");
+                    List<MessageChunkFile> chunks = actualData.DiskChunks;
+                    MessageChunkFile fileTarget = chunks[lastChunk];
+                    int messagesToSave = channel.NetworkMessages.Count - lastKnownCount;
+                    lastKnownCount = channel.NetworkMessages.Count;
+                    while (messagesToSave > 0)
+                    {
+                        Log.GlobalDebug("Messages to Save: " + messagesToSave.ToString());
+                        int index = channel.NetworkMessages.Count - messagesToSave;
+                        if(fileTarget.Messages.Count >= 50)
+                        {
+                            chunks[chunks.Count - 1] = fileTarget;
+                            fileTarget = new MessageChunkFile();
+                            fileTarget.ChannelUUID = channel.UUID;
+                            chunks.Add(fileTarget);
+                        }
+                        fileTarget.Messages.Add(channel.NetworkMessages[index]);
+                        messagesToSave--;
+                    }
+                    lastKnownCount = channel.NetworkMessages.Count;
+                    _channelToLastKnownIndex[channel] = lastKnownCount;
+                    chunks[chunks.Count - 1] = fileTarget;
+                    actualData.LastChunk = chunks.Count - 1;
+                    actualData.DiskChunks = chunks;
+                }
+            }
         }
 
         private static void HandleConsole()

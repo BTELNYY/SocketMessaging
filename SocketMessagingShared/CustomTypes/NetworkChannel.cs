@@ -2,6 +2,7 @@
 using SocketNetworking.PacketSystem.TypeWrappers;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -39,8 +40,9 @@ namespace SocketMessagingShared.CustomTypes
             writer.WriteString(Name);
             writer.WriteString(Description);
             writer.WriteString(UUID);
+            List<NetworkMessage> trimmed = NetworkMessages.Skip(Math.Max(0, NetworkMessages.Count() - 50)).ToList();
             SerializableList<NetworkMessage> messages = new SerializableList<NetworkMessage>();
-            messages.OverwriteContained(NetworkMessages);
+            messages.OverwriteContained(trimmed);
             writer.Write<SerializableList<NetworkMessage>>(messages);
             return writer.Data;
         }

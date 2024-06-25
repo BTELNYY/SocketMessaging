@@ -3,6 +3,7 @@ using SocketMessagingServer.ServerData.Channels;
 using SocketMessagingServer.ServerData.Groups;
 using SocketMessagingServer.ServerData.Users;
 using SocketMessagingShared.CustomTypes;
+using SocketNetworking;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -75,6 +76,10 @@ namespace SocketMessagingServer.ServerData
                 ChannelData dataChannel = new ChannelData();
                 dataChannel.PermanentID = channel.Split('.')[0];
                 ChannelData actualData = GetConfigItem<ChannelData>(dataChannel);
+                if(actualData == null)
+                {
+                    Log.GlobalWarning("Channnel Data wasn't loaded correctly.");
+                }
                 ChannelNameToGuidd.Add(actualData.ChannelName, actualData.PermanentID);
             }
             foreach (string group in Directory.GetFiles(GroupDataDirectory))
@@ -114,8 +119,16 @@ namespace SocketMessagingServer.ServerData
             if (File.Exists(path))
             {
                 string data = File.ReadAllText(path);
-                T thing = JsonConvert.DeserializeObject<T>(data);
-                return thing;
+                try
+                {
+                    T thing = JsonConvert.DeserializeObject<T>(data);
+                    return thing;
+                }
+                catch(Exception ex)
+                {
+                    Log.GlobalError(ex.ToString());
+                    return null;
+                }
             }
             else
             {
@@ -130,6 +143,7 @@ namespace SocketMessagingServer.ServerData
                 Directory.CreateDirectory(item.Directory);
             }
             string text = JsonConvert.SerializeObject(item);
+            Log.GlobalDebug(text);
             string path = Path.Combine(item.Directory, item.Filename);
             if (File.Exists(path) && !allowOverwrite)
             {
