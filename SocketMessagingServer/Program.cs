@@ -113,6 +113,7 @@ namespace SocketMessagingServer
                             writtenNewFile = true;
                             fileTarget = new MessageChunkFile();
                             fileTarget.ChannelUUID = channel.UUID;
+                            fileTarget.ChunkID = lastChunk + 1;
                             fileTarget.Messages.Add(channel.NetworkMessages[index]);
                         }
                         fileTarget.Messages.Add(channel.NetworkMessages[index]);
@@ -122,7 +123,8 @@ namespace SocketMessagingServer
                     _channelToLastKnownCount[channel] = lastKnownCount;
                     if (!writtenNewFile)
                     {
-                        chunks[chunks.Count - 1] = fileTarget;
+                        int lastIndex = chunks.IndexOf(fileTarget);
+                        chunks[lastIndex] = fileTarget;
                     }
                     else
                     {
