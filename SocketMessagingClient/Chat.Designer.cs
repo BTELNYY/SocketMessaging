@@ -45,7 +45,7 @@
             this.MessageTextBox.Location = new System.Drawing.Point(263, 606);
             this.MessageTextBox.MaxLength = 140;
             this.MessageTextBox.Name = "MessageTextBox";
-            this.MessageTextBox.Size = new System.Drawing.Size(776, 29);
+            this.MessageTextBox.Size = new System.Drawing.Size(791, 29);
             this.MessageTextBox.TabIndex = 0;
             // 
             // SendButton
@@ -53,7 +53,7 @@
             this.SendButton.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(118)))), ((int)(((byte)(171)))), ((int)(((byte)(174)))));
             this.SendButton.FlatAppearance.BorderSize = 0;
             this.SendButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.SendButton.Location = new System.Drawing.Point(1045, 606);
+            this.SendButton.Location = new System.Drawing.Point(1060, 606);
             this.SendButton.Name = "SendButton";
             this.SendButton.Size = new System.Drawing.Size(30, 30);
             this.SendButton.TabIndex = 1;
