@@ -75,17 +75,10 @@
             this.passwordtextbox.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.passwordtextbox.Location = new System.Drawing.Point(108, 120);
             this.passwordtextbox.Name = "passwordtextbox";
+            this.passwordtextbox.PasswordChar = '♡';
             this.passwordtextbox.Size = new System.Drawing.Size(172, 22);
             this.passwordtextbox.TabIndex = 15;
-            // 
-            // passwordtextboxcheck
-            // 
-            this.passwordtextboxcheck.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.passwordtextboxcheck.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.passwordtextboxcheck.Location = new System.Drawing.Point(108, 163);
-            this.passwordtextboxcheck.Name = "passwordtextboxcheck";
-            this.passwordtextboxcheck.Size = new System.Drawing.Size(172, 22);
-            this.passwordtextboxcheck.TabIndex = 16;
+            this.passwordtextbox.KeyDown += new System.Windows.Forms.KeyEventHandler(this.passwordtextbox_KeyDown);
             // 
             // usernametextbox
             // 
@@ -95,6 +88,7 @@
             this.usernametextbox.Name = "usernametextbox";
             this.usernametextbox.Size = new System.Drawing.Size(172, 22);
             this.usernametextbox.TabIndex = 14;
+            this.usernametextbox.KeyDown += new System.Windows.Forms.KeyEventHandler(this.usernametextbox_KeyDown);
             // 
             // label4
             // 
@@ -139,7 +133,17 @@
             this.label1.Size = new System.Drawing.Size(77, 24);
             this.label1.TabIndex = 10;
             this.label1.Text = "Sign Up";
-            
+            // 
+            // passwordtextboxcheck
+            // 
+            this.passwordtextboxcheck.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.passwordtextboxcheck.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.passwordtextboxcheck.Location = new System.Drawing.Point(108, 163);
+            this.passwordtextboxcheck.Name = "passwordtextboxcheck";
+            this.passwordtextboxcheck.PasswordChar = '♡';
+            this.passwordtextboxcheck.Size = new System.Drawing.Size(172, 22);
+            this.passwordtextboxcheck.TabIndex = 16;
+            this.passwordtextboxcheck.KeyDown += new System.Windows.Forms.KeyEventHandler(this.passwordtextboxcheck_KeyDown);
             // 
             // label7
             // 
@@ -168,6 +172,7 @@
             this.Controls.Add(this.label3);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.label1);
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MaximizeBox = false;
             this.MinimizeBox = false;

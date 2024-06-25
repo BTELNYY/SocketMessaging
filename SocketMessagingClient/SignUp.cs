@@ -21,25 +21,31 @@ namespace SocketMessagingClient
 
         private void button2_Click(object sender, EventArgs e)
         {
+            signupcheck();
+            
+        }
+
+        private void signupcheck()
+        {
             if (usernametextbox.Text != string.Empty && passwordtextbox.Text == passwordtextboxcheck.Text)
             {
-                    bool AccCreated = Program.MyClient.ClientCreateAccount(usernametextbox.Text, passwordtextbox.Text);
-                    if (!AccCreated)
-                    {
-                        label1.Visible = false;
-                        label2.Text = $"Account with username: {usernametextbox.Text} already exist {AccCreated}";
-                    }
-                    else
-                    {
-                        LoginSwitcher();
-                    }
+                bool AccCreated = Program.MyClient.ClientCreateAccount(usernametextbox.Text, passwordtextbox.Text);
+                if (!AccCreated)
+                {
+                    label1.Visible = false;
+                    label2.Text = $"Account with username: {usernametextbox.Text} already exist {AccCreated}";
+                }
+                else
+                {
+                    LoginSwitcher();
+                }
             }
             else if (passwordtextbox.Text != passwordtextboxcheck.Text)
             {
                 label1.Visible = false;
                 label2.Text = "Password doesn't match";
             }
-            else 
+            else
             {
                 label1.Text = "Username is Incorrect";
             }
@@ -54,6 +60,7 @@ namespace SocketMessagingClient
             
         }
 
+
         private void label6_Click(object sender, EventArgs e)
         {
             LoginSwitcher();
@@ -64,6 +71,22 @@ namespace SocketMessagingClient
             
         }
 
-        
+        private void passwordtextboxcheck_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Return)
+                signupcheck();
+        }
+
+        private void passwordtextbox_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Return)
+                signupcheck();
+        }
+
+        private void usernametextbox_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Return)
+                signupcheck();
+        }
     }
 }
