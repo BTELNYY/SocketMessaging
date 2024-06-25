@@ -218,11 +218,13 @@ namespace SocketMessagingClient
                     continue;
                 }
                 Label label = new Label();
+                int lengthOfMessage = message.ToString().Length;
+                int sizeMultiplier = lengthOfMessage / 20;
                 label.Text = message.ToString();
                 label.Location = new Point(265, yOffset);
                 label.Visible = true;
                 label.AutoSize = false;
-                label.Size = new Size(780, 30);
+                label.Size = new Size(780, 30 * Math.Max(1, sizeMultiplier));
                 label.ForeColor = Color.White;
                 label.Font = new Font(label.Font.FontFamily.Name, 15);
                 bool shouldScrollToBottom = false;
