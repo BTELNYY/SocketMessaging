@@ -204,7 +204,13 @@ namespace SocketMessagingClient
         }
         //list of drawen messages
         List<NetworkMessage> _alreadyRenderedMessages = new List<NetworkMessage>();
-
+        // ChannelPanel_Paint for displaying info when ChannelPanel_Paint(Panel) claryfiyng data and selected channel
+        // then set list messages to the Curenetchannel NetworkMessages (all the messages in the channel)
+        // then add yoffset for messages
+        // then for each message in messages list fo through and add Log debug to console
+        // then claryfying if already redered not equal to message
+        // then diisplying lables in right order
+        // then also check if messages height is much more than our size of form (720) then add vertical scrollbar
         private void ChannelPanel_Paint(object sender, PaintEventArgs e)
         {
             if (CurrentChannel == null) return;
@@ -219,7 +225,7 @@ namespace SocketMessagingClient
                 }
                 Label label = new Label();
                 int lengthOfMessage = message.ToString().Length;
-                int sizeMultiplier = lengthOfMessage / 20;
+                int sizeMultiplier = (lengthOfMessage / 20)/2;
                 label.Text = message.ToString();
                 label.Location = new Point(265, yOffset);
                 label.Visible = true;
