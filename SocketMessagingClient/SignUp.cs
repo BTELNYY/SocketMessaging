@@ -1,4 +1,6 @@
-﻿using System;
+﻿// ALL THE COMMENTS ARE JUST NOT EVEN CLOSE, THERE MUCH MORE PROCESSES ON SERVER, ETC.
+// USED JUST TO APPROXIMATELY EXPLAIN WHAT IS GOING ON
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
