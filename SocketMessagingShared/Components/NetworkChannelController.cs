@@ -79,6 +79,11 @@ namespace SocketMessagingShared.Components
         /// </summary>
         public event Action<NetworkChannel, NetworkMessage> MessegeRecieved;
 
+        /// <summary>
+        /// Called only on the Client when the server sends a batch of messages.
+        /// </summary>
+        public event Action<NetworkChannel> MessagesRecieved;
+
         public delegate bool ClientCreateChannelReciever(MessagingClient client, string name, string Descrption);
         public ClientCreateChannelReciever OnClientCreateChannel { get; set; } = null;
 
@@ -185,20 +190,29 @@ namespace SocketMessagingShared.Components
             return result;
         }
 
-        [NetworkInvocable(PacketDirection.Client)]
+        [NetworkInvocable(PacketDirection.Client, false)]
         private bool ServerGetMessageRequest(NetworkClient client, NetworkChannel target, NetworkMessage message)
         {
-            if(OnClientMessageRequest != null)
+            NetworkChannel localChannel = _channels.Where(x => x.UUID == target.UUID).FirstOrDefault();
+            if (localChannel == null)
             {
-                MessagingClient mClient = (MessagingClient)client;
-                bool result = OnClientMessageRequest(mClient, target, message);
+                Log.GlobalError("Failed to find channel with UUID: " + target.UUID);
+                return false;
+            }
+            MessagingClient mClient = (MessagingClient)client;
+            if (OnClientMessageRequest != null)
+            {
+                bool result = OnClientMessageRequest(mClient, localChannel, message);
                 if (!result)
                 {
                     return false;
                 }
             }
-            MessageSent?.Invoke(target, message);
-            ServerSendMessage(target, message);
+            //Message validation
+            message.AuthorUUID = mClient.UUID;
+            message.AuthorName = mClient.Username;
+            MessageSent?.Invoke(localChannel, message);
+            ServerSendMessage(localChannel, message);
             return true;
         }
 
@@ -221,7 +235,7 @@ namespace SocketMessagingShared.Components
         private void ClientGetMessageUpdate(NetworkChannel target, NetworkMessage message)
         {
             NetworkChannel localTarget = _channels.Where(x => x.UUID == target.UUID).FirstOrDefault();
-            if(localTarget == null)
+            if (localTarget == null)
             {
                 Log.GlobalWarning("failed to find channel with GUID: " + target.UUID + "\n Client and server are out of sync, some messages have been lost.");
                 _channels.OverwriteContained(ClientGetChannels());
@@ -229,7 +243,7 @@ namespace SocketMessagingShared.Components
                 return;
             }
             int index = _channels.IndexOf(localTarget);
-            if(index == -1)
+            if (index == -1)
             {
                 Log.GlobalWarning("Failed to find channel!");
                 _channels.OverwriteContained(ClientGetChannels());
@@ -238,6 +252,40 @@ namespace SocketMessagingShared.Components
             }
             _channels[index].NetworkMessages.Add(message);
             MessegeRecieved?.Invoke(localTarget, message);
+        }
+
+        public void ServerSendMessages(NetworkChannel channel, List<NetworkMessage> messages, int insertIndex = -1)
+        {
+            MessagingServer.NetworkInvokeOnAll(this, nameof(ClientGetMessages), new object[] { channel, messages, insertIndex });
+        }
+
+        [NetworkInvocable(PacketDirection.Server)]
+        private void ClientGetMessages(NetworkChannel channel, SerializableList<NetworkMessage> messages, int insertIndex)
+        {
+            NetworkChannel localTarget = _channels.Where(x => x.UUID == channel.UUID).FirstOrDefault();
+            if (localTarget == null)
+            {
+                Log.GlobalWarning("failed to find channel with UUID: " + channel.UUID + "\n Client and server are out of sync, some messages have been lost.");
+                _channels.OverwriteContained(ClientGetChannels());
+                ClientReceiveChannels?.Invoke(_channels.ToList());
+                return;
+            }
+            int index = _channels.IndexOf(localTarget);
+            if (index == -1)
+            {
+                Log.GlobalWarning("Failed to find channel! UUID: " + localTarget.UUID);
+                _channels.OverwriteContained(ClientGetChannels());
+                ClientReceiveChannels?.Invoke(_channels.ToList());
+                return;
+            }
+            if(insertIndex > -1)
+            {
+                _channels[index].NetworkMessages.AddRange(messages);
+            }
+            else
+            {
+                _channels[index].NetworkMessages.InsertRange(insertIndex, messages);
+            }
         }
 
         public List<NetworkChannel> ClientGetChannels()

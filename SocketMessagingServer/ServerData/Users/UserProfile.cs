@@ -15,11 +15,11 @@ namespace SocketMessagingServer.ServerData.Users
         {
             get
             {
-                return Path.Combine(DataManager.UserDataDirectory, PermanentID);
+                return Path.Combine(DataManager.UserDataDirectory, UUID);
             }
         }
 
-        public string PermanentID { get; set; } = string.Empty;
+        public string UUID { get; set; } = string.Empty;
 
         public string Username { get; set; } = string.Empty;
 

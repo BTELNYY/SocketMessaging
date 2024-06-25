@@ -29,37 +29,39 @@
         private void InitializeComponent()
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Chat));
-            this.writetextbox = new System.Windows.Forms.TextBox();
-            this.button1 = new System.Windows.Forms.Button();
+            this.MessageTextBox = new System.Windows.Forms.TextBox();
+            this.SendButton = new System.Windows.Forms.Button();
             this.NoChannelsLabel = new System.Windows.Forms.Label();
-            this.panel1 = new System.Windows.Forms.Panel();
+            this.ChannelPanel = new System.Windows.Forms.FlowLayoutPanel();
+            this.ChatPanel = new System.Windows.Forms.FlowLayoutPanel();
             this.SuspendLayout();
             // 
-            // writetextbox
+            // MessageTextBox
             // 
-            this.writetextbox.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(39)))), ((int)(((byte)(40)))), ((int)(((byte)(41)))));
-            this.writetextbox.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.writetextbox.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.writetextbox.ForeColor = System.Drawing.SystemColors.Window;
-            this.writetextbox.Location = new System.Drawing.Point(431, 591);
-            this.writetextbox.Multiline = true;
-            this.writetextbox.Name = "writetextbox";
-            this.writetextbox.Size = new System.Drawing.Size(610, 45);
-            this.writetextbox.TabIndex = 0;
-            this.writetextbox.TextChanged += new System.EventHandler(this.textBox1_TextChanged);
-            this.writetextbox.KeyDown += new System.Windows.Forms.KeyEventHandler(this.textBox1_KeyDown);
+            this.MessageTextBox.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(39)))), ((int)(((byte)(40)))), ((int)(((byte)(41)))));
+            this.MessageTextBox.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.MessageTextBox.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.MessageTextBox.ForeColor = System.Drawing.SystemColors.Window;
+            this.MessageTextBox.Location = new System.Drawing.Point(431, 591);
+            this.MessageTextBox.Multiline = true;
+            this.MessageTextBox.Name = "MessageTextBox";
+            this.MessageTextBox.Size = new System.Drawing.Size(610, 45);
+            this.MessageTextBox.TabIndex = 0;
+            this.MessageTextBox.TextChanged += new System.EventHandler(this.MessageTextBox_TextChanged);
+            this.MessageTextBox.KeyDown += new System.Windows.Forms.KeyEventHandler(this.MessageTextBox_KeyDown);
             // 
-            // button1
+            // SendButton
             // 
-            this.button1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(118)))), ((int)(((byte)(171)))), ((int)(((byte)(174)))));
-            this.button1.FlatAppearance.BorderSize = 0;
-            this.button1.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.button1.Location = new System.Drawing.Point(1047, 591);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(45, 45);
-            this.button1.TabIndex = 1;
-            this.button1.Text = "➤";
-            this.button1.UseVisualStyleBackColor = false;
+            this.SendButton.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(118)))), ((int)(((byte)(171)))), ((int)(((byte)(174)))));
+            this.SendButton.FlatAppearance.BorderSize = 0;
+            this.SendButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.SendButton.Location = new System.Drawing.Point(1047, 591);
+            this.SendButton.Name = "SendButton";
+            this.SendButton.Size = new System.Drawing.Size(45, 45);
+            this.SendButton.TabIndex = 1;
+            this.SendButton.Text = "➤";
+            this.SendButton.UseVisualStyleBackColor = false;
+            this.SendButton.Click += new System.EventHandler(this.SendButton_Click);
             // 
             // NoChannelsLabel
             // 
@@ -72,14 +74,25 @@
             this.NoChannelsLabel.TabIndex = 3;
             this.NoChannelsLabel.Text = "You have selected no channel, nothing to show.";
             // 
-            // panel1
+            // ChannelPanel
             // 
-            this.panel1.AutoScroll = true;
-            this.panel1.Location = new System.Drawing.Point(314, 12);
-            this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(799, 573);
-            this.panel1.TabIndex = 4;
-            this.panel1.Paint += new System.Windows.Forms.PaintEventHandler(this.panel1_Paint_1);
+            this.ChannelPanel.AutoScroll = true;
+            this.ChannelPanel.FlowDirection = System.Windows.Forms.FlowDirection.TopDown;
+            this.ChannelPanel.Location = new System.Drawing.Point(0, 0);
+            this.ChannelPanel.Name = "ChannelPanel";
+            this.ChannelPanel.Size = new System.Drawing.Size(308, 585);
+            this.ChannelPanel.TabIndex = 5;
+            this.ChannelPanel.WrapContents = false;
+            this.ChannelPanel.Paint += new System.Windows.Forms.PaintEventHandler(this.ChannelPanel_Paint);
+            // 
+            // ChatPanel
+            // 
+            this.ChatPanel.FlowDirection = System.Windows.Forms.FlowDirection.TopDown;
+            this.ChatPanel.Location = new System.Drawing.Point(314, 0);
+            this.ChatPanel.Name = "ChatPanel";
+            this.ChatPanel.Size = new System.Drawing.Size(812, 585);
+            this.ChatPanel.TabIndex = 6;
+            this.ChatPanel.WrapContents = false;
             // 
             // Chat
             // 
@@ -87,10 +100,11 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(39)))), ((int)(((byte)(40)))), ((int)(((byte)(41)))));
             this.ClientSize = new System.Drawing.Size(1264, 681);
+            this.Controls.Add(this.ChannelPanel);
             this.Controls.Add(this.NoChannelsLabel);
-            this.Controls.Add(this.button1);
-            this.Controls.Add(this.writetextbox);
-            this.Controls.Add(this.panel1);
+            this.Controls.Add(this.SendButton);
+            this.Controls.Add(this.MessageTextBox);
+            this.Controls.Add(this.ChatPanel);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MaximizeBox = false;
             this.MinimizeBox = false;
@@ -105,9 +119,10 @@
 
         #endregion
 
-        private System.Windows.Forms.TextBox writetextbox;
-        private System.Windows.Forms.Button button1;
+        private System.Windows.Forms.TextBox MessageTextBox;
+        private System.Windows.Forms.Button SendButton;
         private System.Windows.Forms.Label NoChannelsLabel;
-        private System.Windows.Forms.Panel panel1;
+        private System.Windows.Forms.FlowLayoutPanel ChannelPanel;
+        private System.Windows.Forms.FlowLayoutPanel ChatPanel;
     }
 }

@@ -21,11 +21,17 @@ namespace SocketMessagingServer
         public static void Main(string[] args)
         {
             Log.OnLog += HandleNetworkLog;
-            //Log.SetHiddenFlag(LogSeverity.Debug);
+
+            Log.SetHiddenFlag(LogSeverity.Debug);
+#if DEBUG
+            Log.RemoveHiddenFlag(LogSeverity.Debug);
+#endif
             DataManager.SyncLists();
             NetworkServer.ClientType = typeof(MessagingClient);
             NetworkServer.DefaultReady = false;
             NetworkServer.ClientConnected += ClientConnected;
+            //TODO: Change to read file.
+            ServerConfig.Instance = new ServerConfig();
             MessagingServer.PrepareServer();
             foreach (string dir in Directory.GetDirectories(DataManager.ChannelDataDirectory))
             {
@@ -115,6 +121,8 @@ namespace SocketMessagingServer
                 reason = "Username or password is incorrect.";
                 return false;
             }
+            client.User.UUID = profile.UUID;
+            client.User.Username = profile.Username;
             reason = string.Empty;
             return true;
         }

@@ -61,6 +61,22 @@ namespace SocketMessagingShared
             _controller.LocalClient = this;
         }
 
+        public string Username
+        {
+            get
+            {
+                return User.Username;
+            }
+        }
+
+        public string UUID
+        {
+            get
+            {
+                return User.UUID;
+            }
+        }
+
         private void CreateUserObject(ConnectionState obj)
         {
             if(obj != ConnectionState.Connected)

@@ -34,16 +34,49 @@ namespace SocketMessagingClient
             }
         }
 
+        public NetworkChannel CurrentChannel
+        {
+            get
+            {
+                if(SelectedChannelIndex == -1)
+                {
+                    return null;
+                }
+                return _channels[SelectedChannelIndex];
+            }
+        }
+
         public Chat()
         {
             InitializeComponent();
             _channels = Program.MyClient.ClientChannelController.Channels;
         }
 
+
+        private void DisplayPreviousMessage(NetworkChannel channel)
+        {
+
+        }
+
+        private void SendMessage(string text)
+        {
+            if(CurrentChannel == null)
+            {
+                return;
+            }
+            NetworkMessage message = new NetworkMessage();
+            message.Content = text;
+            message.Timestamp = DateTime.UtcNow.ToUnixTimestamp();
+            message.AuthorName = Program.MyClient.Username;
+            message.AuthorUUID = Program.MyClient.UUID;
+            Program.MyClient.ClientChannelController.ClientSendMessage(CurrentChannel, message);
+        }
+
         private void Chat_Load(object sender, EventArgs e)
         {
             Program.MyClient.ClientChannelController.ClientReceiveChannels += ClientChannelController_ClientReceiveChannels;
             Program.MyClient.ClientChannelController.MessegeRecieved += ClientChannelController_MessegeRecieved;
+            Program.MyClient.ClientChannelController.MessagesRecieved += ClientChannelController_MessagesRecieved;
         }
 
         private object _lock = new object();
@@ -56,7 +89,36 @@ namespace SocketMessagingClient
             {
                 _channels = obj;
             }
-            Log.GlobalDebug("Got new channels, invalidating.");
+            Invalidate();
+        }
+
+        private void ClientChannelController_MessagesRecieved(NetworkChannel obj)
+        {
+            lock (_lock)
+            {
+                _channels = Program.MyClient.ClientChannelController.Channels;
+            }
+            //Do not invalidate if the channel thats being updated isnt the channel we are focusing.
+            if (obj.UUID != _selectedChannelUUID)
+            {
+                return;
+            }
+            ChatPanel.Invalidate();
+            Invalidate();
+        }
+
+        private void ClientChannelController_MessegeRecieved(NetworkChannel arg1, NetworkMessage arg2)
+        {
+            lock (_lock)
+            {
+                _channels = Program.MyClient.ClientChannelController.Channels;
+            }
+            //Do not invalidate if the channel thats being updated isnt the channel we are focusing.
+            if (arg1.UUID != _selectedChannelUUID)
+            {
+                return;
+            }
+            ChatPanel.Invalidate();
             Invalidate();
         }
 
@@ -64,7 +126,7 @@ namespace SocketMessagingClient
         {
             foreach (Button button in buttons) 
             {
-                button.Controls.Remove(button);
+                ChannelPanel.Controls.Remove(button);
                 if(button.Tag == null)
                 {
                     continue;
@@ -90,7 +152,7 @@ namespace SocketMessagingClient
                 button.Size = new Size(250,30);
                 button.Click += Button_Click;
                 button.Name = channel.UUID;
-                this.Controls.Add(button);
+                ChannelPanel.Controls.Add(button);
                 buttons.Add(button);
                 c +=30;
                 _buttonsToChannels.Add(channel.UUID, channel);
@@ -101,33 +163,12 @@ namespace SocketMessagingClient
         {
             Button pressed = sender as Button;
             NetworkChannel channel = _buttonsToChannels[pressed.Name];
-            _selectedChannelUUID = channel.UUID;
-            DisplayPreviousMessage(channel);
-        }
-        
-        private void DisplayPreviousMessage(NetworkChannel channel)
-        {
-        
-        }
-
-        private void ClientChannelController_MessegeRecieved(NetworkChannel arg1, NetworkMessage arg2)
-        {
-            Invalidate();
-        }
-
-        private void button1_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void panel1_Paint(object sender, PaintEventArgs e)
-        {
-
-        }
-
-        private void button1_Click_1(object sender, EventArgs e)
-        {
-           
+            if(_selectedChannelUUID != channel.UUID)
+            {
+                _selectedChannelUUID = channel.UUID;
+                DisplayPreviousMessage(channel);
+                Invalidate();
+            }
         }
 
         private void Chat_Paint(object sender, PaintEventArgs e)
@@ -135,34 +176,64 @@ namespace SocketMessagingClient
             Log.GlobalDebug("Redraw");
             if (SelectedChannelIndex == -1)
             {
-                this.NoChannelsLabel.Show();
-                this.writetextbox.Hide();
-                this.button1.Hide();
+                NoChannelsLabel.Show();
+                MessageTextBox.Hide();
+                SendButton.Hide();
             }
             else
             {
-                this.NoChannelsLabel.Hide();
-                this.writetextbox.Show();
-                this.button1.Show();
+                NoChannelsLabel.Hide();
+                MessageTextBox.Show();
+                SendButton.Show();
             }
             RemoveButtons();
             _buttonsToChannels.Clear();
             ShowButtons();
         }
 
-        private void textBox1_TextChanged(object sender, EventArgs e)
+        List<NetworkMessage> _alreadyRenderedMessages = new List<NetworkMessage>();
+
+        private void ChannelPanel_Paint(object sender, PaintEventArgs e)
+        {
+            if (CurrentChannel == null) return;
+            List<NetworkMessage> messages = CurrentChannel.NetworkMessages;
+            int yOffset = 0;
+            foreach (NetworkMessage message in messages)
+            {
+                if (_alreadyRenderedMessages.Contains(message))
+                {
+                    continue;
+                }
+                Label label = new Label();
+                label.Text = message.ToString();
+                label.Location = new Point(315, yOffset);
+                label.Visible = true;
+                label.AutoSize = false;
+                label.Size = new Size(800, 30);
+                label.ForeColor = Color.White;
+                label.Font = new Font(label.Font.FontFamily.Name, 15);
+                ChatPanel.Controls.Add(label);
+                yOffset += 50;
+                _alreadyRenderedMessages.Add(message);
+            }
+        }
+
+        private void MessageTextBox_TextChanged(object sender, EventArgs e)
         {
             
         }
 
-        private void textBox1_KeyDown(object sender, KeyEventArgs e)
+        private void MessageTextBox_KeyDown(object sender, KeyEventArgs e)
         {
-            if (e.KeyCode == Keys.Return) { writetextbox.Text = string.Empty; }
+            if (e.KeyCode != Keys.Return) { return; }
+            SendMessage(MessageTextBox.Text);
+            MessageTextBox.Text = string.Empty;
         }
 
-        private void panel1_Paint_1(object sender, PaintEventArgs e)
+        private void SendButton_Click(object sender, EventArgs e)
         {
-
+            SendMessage(MessageTextBox.Text);
+            MessageTextBox.Text = string.Empty;
         }
     }
 }

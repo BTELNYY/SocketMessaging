@@ -67,7 +67,7 @@ namespace SocketMessagingServer.ServerData
                 UserProfile profile = GetProfile(dir.Split('/').Last());
                 if (profile != null)
                 {
-                    UsernameToGuid.Add(profile.Username, profile.PermanentID);
+                    UsernameToGuid.Add(profile.Username, profile.UUID);
                 }
             }
             foreach (string channel in Directory.GetFiles(ChannelDataDirectory))
@@ -163,7 +163,7 @@ namespace SocketMessagingServer.ServerData
 
         public static void WriteProfileData(UserProfile profile)
         {
-            string dir = UserDataDirectory + profile.PermanentID;
+            string dir = UserDataDirectory + profile.UUID;
             if (!Directory.Exists(dir))
             {
                 Directory.CreateDirectory(dir);
@@ -215,14 +215,14 @@ namespace SocketMessagingServer.ServerData
             UserProfile profile = new UserProfile();
             profile.Username = username;
             profile.PasswordHash = password;
-            profile.PermanentID = Guid.NewGuid().ToString();
+            profile.UUID = Guid.NewGuid().ToString();
             if (UsernameToGuid.ContainsKey(username))
             {
                 result = "Username is already taken.";
                 return false;
             }
             WriteProfileData(profile);
-            UsernameToGuid.Add(profile.Username, profile.PermanentID);
+            UsernameToGuid.Add(profile.Username, profile.UUID);
             result = string.Empty;
             return true;
         }

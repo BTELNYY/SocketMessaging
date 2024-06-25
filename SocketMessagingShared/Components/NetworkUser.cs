@@ -4,6 +4,7 @@ using SocketNetworking.PacketSystem;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Policy;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -78,7 +79,7 @@ namespace SocketMessagingShared.Components
 
         public MessagingClient Client { get; private set; }
 
-        public string _username = string.Empty;
+        private string _username = string.Empty;
 
         public string Username
         {
@@ -91,10 +92,37 @@ namespace SocketMessagingShared.Components
                 if (NetworkManager.WhereAmI == ClientLocation.Remote)
                 {
                     ServerSetUsername(value);
+                    _username = value;
                     return;
                 }
+                _username = value;
                 ClientSetUsername(value);
             }
+        }
+
+        private string _uuid = string.Empty;
+
+        public string UUID
+        {
+            get
+            {
+                return _uuid;
+            }
+            set
+            {
+                if(NetworkManager.WhereAmI != ClientLocation.Remote)
+                {
+                    return;
+                }
+                _uuid = value;
+                NetworkServer.NetworkInvokeOnAll(this, nameof(SetUUIDRpc), new object[] { _uuid }); 
+            }
+        }
+
+        [NetworkInvocable(PacketDirection.Server)]
+        private void SetUUIDRpc(string uuid)
+        {
+            _uuid = uuid;
         }
 
         [NetworkInvocable(PacketDirection.Server)]
@@ -132,6 +160,23 @@ namespace SocketMessagingShared.Components
                     {
                         msgClient.ServerNotifyClientRemoved(this);
                     }
+                }
+            }
+        }
+
+        public override void OnConnected(NetworkClient client)
+        {
+            base.OnConnected(client);
+            if(client.ClientID == OwnerClientID || NetworkManager.WhereAmI != ClientLocation.Remote)
+            {
+                return;
+            }
+            foreach (NetworkClient c in NetworkServer.ConnectedClients)
+            {
+                MessagingClient msgClient = c as MessagingClient;
+                if (msgClient != null)
+                {
+                    msgClient.ServerNotifyClientAdded(this);
                 }
             }
         }
