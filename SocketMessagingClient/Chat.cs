@@ -42,7 +42,7 @@ namespace SocketMessagingClient
                 {
                     return null;
                 }
-                return _channels[SelectedChannelIndex];
+                return Program.MyClient.ClientChannelController.Channels[SelectedChannelIndex];
             }
         }
 
@@ -91,8 +91,9 @@ namespace SocketMessagingClient
         {
             lock(_lock)
             {
-                _channels = obj;
+                _channels = Program.MyClient.ClientChannelController.Channels;
             }
+            ChannelPanel.Invalidate();
             Invalidate();
         }
 
@@ -206,6 +207,7 @@ namespace SocketMessagingClient
             int yOffset = 0;
             foreach (NetworkMessage message in messages)
             {
+                Log.GlobalDebug($"Channel: {CurrentChannel.Name}, Message: {message.AuthorName}: {message.Content}");
                 if (_alreadyRenderedMessages.Contains(message))
                 {
                     continue;

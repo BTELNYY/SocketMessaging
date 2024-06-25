@@ -124,7 +124,7 @@ namespace SocketMessagingShared
 
         public void ServerNotifyClientAdded(NetworkUser user)
         {
-            NetworkInvoke(nameof(ClientAddedRpc), new object[] { user.NetworkID, user.OwnerClientID });
+            NetworkServer.NetworkInvokeOnAll(this, nameof(ClientAddedRpc), new object[] { user.NetworkID, user.OwnerClientID });
         }
 
         public void ServerNotifyClientRemoved(NetworkUser user)
@@ -197,6 +197,7 @@ namespace SocketMessagingShared
         [NetworkInvocable(PacketDirection.Server)]
         void ClientAddedRpc(int id, int ownerId)
         {
+            Log.GlobalDebug($"New Remote Client added! ID: {id}, OwnerID: {ownerId}");
             NetworkUser user = new NetworkUser(id, ownerId);
             NetworkManager.AddNetworkObject(user);
         }

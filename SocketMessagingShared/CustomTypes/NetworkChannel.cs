@@ -40,7 +40,7 @@ namespace SocketMessagingShared.CustomTypes
             writer.WriteString(Description);
             writer.WriteString(UUID);
             SerializableList<NetworkMessage> messages = new SerializableList<NetworkMessage>();
-            messages.OverwriteContained(messages);
+            messages.OverwriteContained(NetworkMessages);
             writer.Write<SerializableList<NetworkMessage>>(messages);
             return writer.Data;
         }

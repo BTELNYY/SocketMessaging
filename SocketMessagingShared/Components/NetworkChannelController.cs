@@ -158,6 +158,7 @@ namespace SocketMessagingShared.Components
             {
                 if (!target.Ready)
                 {
+                    Log.GlobalDebug("Target not ready!");
                     return;
                 }
                 target.NetworkInvoke(this, nameof(ClientGetChannelList), new object[] { channels });
@@ -168,8 +169,12 @@ namespace SocketMessagingShared.Components
         private void ClientGetChannelList(SerializableList<NetworkChannel> channels)
         {
             Log.GlobalInfo("Got new channel list from server. Channels: " + channels.Count);
+            foreach(NetworkChannel channel in channels)
+            {
+                Log.GlobalInfo($"Channel: {channel.Name}, Messages: {channel.NetworkMessages.Count}");
+            }
             _channels = channels;
-            ClientReceiveChannels?.Invoke(channels.ToList());
+            ClientReceiveChannels?.Invoke(_channels.ToList());
         }
 
         public bool ClientSendMessage(NetworkChannel target, NetworkMessage message)
@@ -194,6 +199,12 @@ namespace SocketMessagingShared.Components
         private bool ServerGetMessageRequest(NetworkClient client, NetworkChannel target, NetworkMessage message)
         {
             NetworkChannel localChannel = _channels.Where(x => x.UUID == target.UUID).FirstOrDefault();
+            int index = _channels.IndexOf(localChannel);
+            if (index == -1)
+            {
+                Log.GlobalError("Channel not found!");
+                return false;
+            }
             if (localChannel == null)
             {
                 Log.GlobalError("Failed to find channel with UUID: " + target.UUID);
@@ -211,6 +222,7 @@ namespace SocketMessagingShared.Components
             //Message validation
             message.AuthorUUID = mClient.UUID;
             message.AuthorName = mClient.Username;
+            _channels[index].NetworkMessages.Add(message);
             MessageSent?.Invoke(localChannel, message);
             ServerSendMessage(localChannel, message);
             return true;
@@ -286,6 +298,7 @@ namespace SocketMessagingShared.Components
             {
                 _channels[index].NetworkMessages.InsertRange(insertIndex, messages);
             }
+            ClientReceiveChannels?.Invoke(_channels.ToList());
         }
 
         public List<NetworkChannel> ClientGetChannels()
@@ -360,6 +373,7 @@ namespace SocketMessagingShared.Components
             }
             if (isReady)
             {
+                Log.GlobalDebug("Client Sync because ready: " + client.ClientID);
                 ServerSyncChannels(client);
             }
         }
