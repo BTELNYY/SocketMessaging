@@ -69,6 +69,16 @@ namespace SocketMessagingServer
         {
             //OH YES THE LOOP HELL
             //Doesnt actually matter because we are in a seperate blocking thread.
+            //The Horros....
+            /**
+             * In essence,
+             * Delay the thread by 10 seconds (we save every 10 seconds)
+             * For every channel in the servers channels we:
+             *  first consider the last message we saved, find the index of what messages to save
+             *  if the content did not change, skip the channel.
+             *  Load the channels save data and overwrite the current chunk data (a chunk is 50 messages), if the amount of messages in the current chunk is too much, we move to a new chunk and write it back to the disk.
+             *  Since this operation is multi-threaded, we should NOT access these files otherwise.
+            **/
             while (true)
             {
                 Thread.Sleep(10000);

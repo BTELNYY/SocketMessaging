@@ -89,5 +89,11 @@ namespace SocketMessagingClient
             if (e.KeyCode == Keys.Return)
                 signupcheck();
         }
+
+        //Exit app when we close the form
+        private void SignUp_FormClosed(object sender, FormClosedEventArgs e)
+        {
+            Environment.Exit(0);
+        }
     }
 }

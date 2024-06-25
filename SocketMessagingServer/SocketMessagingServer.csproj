@@ -60,7 +60,6 @@
   <ItemGroup>
     <None Include="App.config" />
     <None Include="packages.config" />
-    <None Include="SocketMessagingServer_TemporaryKey.pfx" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\SocketNetworking\SocketNetworking\SocketNetworking.csproj">

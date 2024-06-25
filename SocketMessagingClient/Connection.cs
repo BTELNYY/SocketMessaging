@@ -42,30 +42,41 @@ namespace SocketMessagingClient
         //If button clicked verifying info and then Client Connect to the server
         private void button1_Click(object sender, EventArgs e)
         {
-            if (textBox1.Text != string.Empty && textBox2.Text != string.Empty && textBox3.Text != string.Empty && textBox4.Text != string.Empty && textBox5.Text != string.Empty && textBox6.Text != string.Empty)
+            if (textBox1.Text != string.Empty && textBox3.Text != string.Empty && textBox4.Text != string.Empty && textBox5.Text != string.Empty && textBox6.Text != string.Empty)
             {
-                Program.MyClient.Connect(textBox1.Text + "." + textBox4.Text + "." + textBox5.Text + "." + textBox6.Text, int.Parse(textBox3.Text), textBox2.Text);
-                this.Hide();
+                bool result = Program.MyClient.Connect(textBox1.Text + "." + textBox4.Text + "." + textBox5.Text + "." + textBox6.Text, int.Parse(textBox3.Text), textBox2.Text);
+                if (result)
+                {
+                    this.Hide();
+                    tryConnect();
+                }
             }
         }
 
         //at the start trying by default connect to the server and if so just call function that show other form
         private void Login_Load(object sender, EventArgs e)
         {
+#if DEBUG
             bool connected = Program.MyClient.Connect("127.0.0.1", 7777, "");
             if (connected)
             {
                 tryConnect();
             }
+#endif
         }
 
         //function that swipes forms
         private void tryConnect()
         {
-            
             Login login = new Login();
             login.ShowDialog();
             this.Close();
+        }
+
+        //Close app when the form is closed.
+        private void Connection_FormClosed(object sender, FormClosedEventArgs e)
+        {
+            Environment.Exit(0);
         }
     }
 }

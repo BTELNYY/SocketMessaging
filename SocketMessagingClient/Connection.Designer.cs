@@ -55,9 +55,6 @@
             this.panel1.TabIndex = 0;
             this.panel1.Paint += new System.Windows.Forms.PaintEventHandler(this.panel1_Paint);
             // 
-            // backgroundWorker1
-            // 
-            // 
             // textBox1
             // 
             this.textBox1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
@@ -68,7 +65,6 @@
             this.textBox1.Name = "textBox1";
             this.textBox1.Size = new System.Drawing.Size(23, 20);
             this.textBox1.TabIndex = 1;
-
             // 
             // textBox2
             // 
@@ -92,7 +88,6 @@
             this.label1.Size = new System.Drawing.Size(42, 16);
             this.label1.TabIndex = 4;
             this.label1.Text = "Pass";
-
             // 
             // label2
             // 
@@ -104,7 +99,6 @@
             this.label2.Size = new System.Drawing.Size(35, 16);
             this.label2.TabIndex = 5;
             this.label2.Text = "Port";
-
             // 
             // button1
             // 
@@ -245,6 +239,7 @@
             this.Name = "Connection";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Connection";
+            this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.Connection_FormClosed);
             this.Load += new System.EventHandler(this.Login_Load);
             this.ResumeLayout(false);
             this.PerformLayout();

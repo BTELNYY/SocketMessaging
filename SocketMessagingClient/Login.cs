@@ -91,5 +91,10 @@ namespace SocketMessagingClient
             signUp.ShowDialog();
         }
 
+        // Exit the app if the form closes.
+        private void Login_FormClosed(object sender, FormClosedEventArgs e)
+        {
+            Environment.Exit(0);
+        }
     }
 }

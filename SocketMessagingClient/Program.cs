@@ -27,7 +27,9 @@ namespace SocketMessagingClient
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
+#if DEBUG
             AllocConsole();
+#endif
             Log.OnLog += HandleNetworkLog;
             MyClient = new MessagingClient();
             MyClient.InitLocalClient();

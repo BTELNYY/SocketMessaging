@@ -253,5 +253,11 @@ namespace SocketMessagingClient
             SendMessage(MessageTextBox.Text);
             MessageTextBox.Text = string.Empty;
         }
+
+        //When the form closes, we terminate the application.
+        private void Chat_FormClosed(object sender, FormClosedEventArgs e)
+        {
+            Environment.Exit(0);
+        }
     }
 }
