@@ -61,6 +61,7 @@
             this.SendButton.TabIndex = 1;
             this.SendButton.Text = "➤";
             this.SendButton.UseVisualStyleBackColor = false;
+            this.SendButton.Visible = false;
             this.SendButton.Click += new System.EventHandler(this.SendButton_Click);
             // 
             // NoChannelsLabel
@@ -80,17 +81,18 @@
             this.ChannelPanel.FlowDirection = System.Windows.Forms.FlowDirection.TopDown;
             this.ChannelPanel.Location = new System.Drawing.Point(0, 0);
             this.ChannelPanel.Name = "ChannelPanel";
-            this.ChannelPanel.Size = new System.Drawing.Size(308, 585);
+            this.ChannelPanel.Size = new System.Drawing.Size(260, 585);
             this.ChannelPanel.TabIndex = 5;
             this.ChannelPanel.WrapContents = false;
             this.ChannelPanel.Paint += new System.Windows.Forms.PaintEventHandler(this.ChannelPanel_Paint);
             // 
             // ChatPanel
             // 
+            this.ChatPanel.AutoScroll = true;
             this.ChatPanel.FlowDirection = System.Windows.Forms.FlowDirection.TopDown;
-            this.ChatPanel.Location = new System.Drawing.Point(314, 0);
+            this.ChatPanel.Location = new System.Drawing.Point(265, 0);
             this.ChatPanel.Name = "ChatPanel";
-            this.ChatPanel.Size = new System.Drawing.Size(812, 585);
+            this.ChatPanel.Size = new System.Drawing.Size(860, 585);
             this.ChatPanel.TabIndex = 6;
             this.ChatPanel.WrapContents = false;
             // 

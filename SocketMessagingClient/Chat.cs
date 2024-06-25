@@ -60,6 +60,10 @@ namespace SocketMessagingClient
 
         private void SendMessage(string text)
         {
+            if(string.IsNullOrEmpty(text) || string.IsNullOrWhiteSpace(text))
+            {
+                return;
+            }
             if(CurrentChannel == null)
             {
                 return;
@@ -167,6 +171,8 @@ namespace SocketMessagingClient
             {
                 _selectedChannelUUID = channel.UUID;
                 DisplayPreviousMessage(channel);
+                _alreadyRenderedMessages.Clear();
+                ChatPanel.Controls.Clear();
                 Invalidate();
             }
         }
@@ -206,13 +212,22 @@ namespace SocketMessagingClient
                 }
                 Label label = new Label();
                 label.Text = message.ToString();
-                label.Location = new Point(315, yOffset);
+                label.Location = new Point(265, yOffset);
                 label.Visible = true;
                 label.AutoSize = false;
-                label.Size = new Size(800, 30);
+                label.Size = new Size(780, 30);
                 label.ForeColor = Color.White;
                 label.Font = new Font(label.Font.FontFamily.Name, 15);
+                bool shouldScrollToBottom = false;
+                if(ChatPanel.VerticalScroll.Value == ChatPanel.VerticalScroll.Maximum - ChatPanel.VerticalScroll.LargeChange + 1)
+                {
+                    shouldScrollToBottom = true;
+                }
                 ChatPanel.Controls.Add(label);
+                if (shouldScrollToBottom)
+                {
+                    ChatPanel.ScrollControlIntoView(label);
+                }
                 yOffset += 50;
                 _alreadyRenderedMessages.Add(message);
             }
@@ -225,9 +240,7 @@ namespace SocketMessagingClient
 
         private void MessageTextBox_KeyDown(object sender, KeyEventArgs e)
         {
-            if (e.KeyCode != Keys.Return) { return; }
-            SendMessage(MessageTextBox.Text);
-            MessageTextBox.Text = string.Empty;
+            
         }
 
         private void SendButton_Click(object sender, EventArgs e)
