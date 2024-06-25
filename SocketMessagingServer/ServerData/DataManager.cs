@@ -112,10 +112,6 @@ namespace SocketMessagingServer.ServerData
 
         public static T GetConfigItem<T>(string path) where T : ConfigFile
         {
-            if (!File.Exists(path))
-            {
-                return default(T);
-            }
             if (File.Exists(path))
             {
                 string data = File.ReadAllText(path);
@@ -149,6 +145,10 @@ namespace SocketMessagingServer.ServerData
             {
                 T thing = JsonConvert.DeserializeObject<T>(path);
                 return thing;
+            }
+            if (allowOverwrite)
+            {
+                File.Delete(path);
             }
             if (!File.Exists(path))
             {

@@ -33,6 +33,10 @@ namespace SocketMessagingServer.ServerData.Channels
                 List<MessageChunkFile> chunks = new List<MessageChunkFile>();
                 foreach(string file in System.IO.Directory.GetFiles(Directory))
                 {
+                    if (file.Split(Path.PathSeparator).Last() == "meta.json")
+                    {
+                        continue;
+                    }
                     MessageChunkFile chunk = DataManager.GetConfigItem<MessageChunkFile>(file);
                     if(chunk == null)
                     {
@@ -69,7 +73,7 @@ namespace SocketMessagingServer.ServerData.Channels
 
         public void SaveChunks()
         {
-            foreach(MessageChunkFile chunk in DiskChunks)
+            foreach(MessageChunkFile chunk in _messages)
             {
                 DataManager.WriteConfigFile(chunk, true);
             }

@@ -63,7 +63,7 @@ namespace SocketMessagingServer
             messageSaving.Start();
         }
 
-        static Dictionary<NetworkChannel, int> _channelToLastKnownIndex = new Dictionary<NetworkChannel, int>();
+        static Dictionary<NetworkChannel, int> _channelToLastKnownCount = new Dictionary<NetworkChannel, int>();
 
         private static void DoMessageSaving()
         {
@@ -77,13 +77,18 @@ namespace SocketMessagingServer
                 foreach (NetworkChannel channel in channels)
                 {
                     int lastKnownCount = 0;
-                    if (_channelToLastKnownIndex.ContainsKey(channel))
+                    if (_channelToLastKnownCount.ContainsKey(channel))
                     {
-                        lastKnownCount = _channelToLastKnownIndex[channel];
+                        lastKnownCount = _channelToLastKnownCount[channel];
                     }
                     else
                     {
-                        _channelToLastKnownIndex.Add(channel, 0);
+                        _channelToLastKnownCount.Add(channel, 0);
+                    }
+                    if (_channelToLastKnownCount[channel] == channel.NetworkMessages.Count)
+                    {
+                        Log.GlobalInfo($"Channel {channel.Name} has no new messages. Skipping.");
+                        continue;
                     }
                     ChannelData data = new ChannelData();
                     data.PermanentID = channel.UUID;
@@ -94,25 +99,38 @@ namespace SocketMessagingServer
                     MessageChunkFile fileTarget = chunks[lastChunk];
                     int messagesToSave = channel.NetworkMessages.Count - lastKnownCount;
                     lastKnownCount = channel.NetworkMessages.Count;
+                    bool writtenNewFile = false;
                     while (messagesToSave > 0)
                     {
                         Log.GlobalDebug("Messages to Save: " + messagesToSave.ToString());
                         int index = channel.NetworkMessages.Count - messagesToSave;
+                        Log.GlobalDebug("Index: " + index.ToString());
+                        NetworkMessage messageToSave = channel.NetworkMessages[index];
+                        Log.GlobalDebug("Message To Save: " + messagesToSave.ToString());
                         if(fileTarget.Messages.Count >= 50)
                         {
-                            chunks[chunks.Count - 1] = fileTarget;
+                            Log.GlobalInfo("Writing new chunk file becuase old one got full!");
+                            writtenNewFile = true;
                             fileTarget = new MessageChunkFile();
                             fileTarget.ChannelUUID = channel.UUID;
-                            chunks.Add(fileTarget);
+                            fileTarget.Messages.Add(channel.NetworkMessages[index]);
                         }
                         fileTarget.Messages.Add(channel.NetworkMessages[index]);
                         messagesToSave--;
                     }
                     lastKnownCount = channel.NetworkMessages.Count;
-                    _channelToLastKnownIndex[channel] = lastKnownCount;
-                    chunks[chunks.Count - 1] = fileTarget;
+                    _channelToLastKnownCount[channel] = lastKnownCount;
+                    if (!writtenNewFile)
+                    {
+                        chunks[chunks.Count - 1] = fileTarget;
+                    }
+                    else
+                    {
+                        chunks.Add(fileTarget);
+                    }
                     actualData.LastChunk = chunks.Count - 1;
                     actualData.DiskChunks = chunks;
+                    DataManager.WriteConfigFile(actualData, true);
                 }
             }
         }
