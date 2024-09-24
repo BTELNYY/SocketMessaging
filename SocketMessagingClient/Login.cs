@@ -13,6 +13,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using SocketMessagingShared;
+using System.Threading;
 
 namespace SocketMessagingClient
 {
@@ -23,12 +24,14 @@ namespace SocketMessagingClient
             InitializeComponent();
         }
         // at the form load, then load debuger
-        private void Chat_Load(object sender, EventArgs e)
+        private void Logon_Load(object sender, EventArgs e)
         {
 #if DEBUG
+            Thread.Sleep(1000);
             Debugger();
 #endif
         }
+
         // debuger only for debugin fast testing used for fastLogin
         private void Debugger()
         {

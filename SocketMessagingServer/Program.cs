@@ -31,6 +31,7 @@ namespace SocketMessagingServer
             DataManager.SyncLists();
             NetworkServer.ClientType = typeof(MessagingClient);
             NetworkServer.DefaultReady = false;
+            //NetworkServer.EncryptionMode = ServerEncryptionMode.Required;
             NetworkServer.ClientConnected += ClientConnected;
             //TODO: Change to read file.
             ServerConfig.Instance = new ServerConfig();
